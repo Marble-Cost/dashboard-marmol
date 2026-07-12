@@ -2,173 +2,447 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard Industria de la Piedra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard · Industria de la Piedra</title>
+
+  <!-- Chart.js (URL corregida: antes estaba envuelta en sintaxis Markdown) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Tipografía premium: Marcellus (capitales romanas, evoca grabado en mármol) + Inter (datos) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --blanco-crema: #FDFBF7;
       --negro: #1A1A1A;
       --dorado: #D4AF37;
       --verde-esmeralda: #046307;
+      --sombra-suave: 0 4px 6px rgba(26, 26, 26, 0.05);
+      --sombra-elevada: 0 14px 30px rgba(26, 26, 26, 0.12);
+      --transicion: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    body { 
-      background-color: var(--blanco-crema); 
-      color: var(--negro); 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      padding: 30px; 
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: var(--blanco-crema);
+      color: var(--negro);
+      font-family: 'Inter', 'Segoe UI', sans-serif;
       margin: 0;
+      padding: clamp(16px, 4vw, 40px);
+      min-height: 100vh;
     }
-    .header { 
-      border-bottom: 3px solid var(--dorado); 
-      padding-bottom: 20px; 
-      margin-bottom: 30px; 
+
+    /* ===== Firma visual: línea dorada superior tipo veta ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--dorado) 0%, #F3E5B0 45%, var(--dorado) 60%, #B8952C 100%);
+      z-index: 100;
     }
-    h1 { 
-      color: var(--verde-esmeralda); 
-      margin: 0; 
-      font-size: 2.2em;
+
+    /* ===== Header ===== */
+    .header {
+      border-bottom: 1px solid rgba(212, 175, 55, 0.45);
+      padding-bottom: 24px;
+      margin-bottom: 36px;
+      animation: entrada 0.6s var(--transicion) both;
     }
-    p {
-      font-size: 1.1em;
+    .eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dorado);
+      margin: 0 0 8px 0;
+    }
+    h1 {
+      font-family: 'Marcellus', serif;
+      color: var(--verde-esmeralda);
+      margin: 0;
+      font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      line-height: 1.15;
+    }
+    .header p {
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
       font-weight: 500;
+      color: rgba(26, 26, 26, 0.65);
+      margin: 10px 0 0 0;
     }
-    .grid-kpis { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-      gap: 20px; 
-      margin-bottom: 30px; 
+
+    /* ===== Grid de KPIs ===== */
+    .grid-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: clamp(14px, 2.5vw, 24px);
+      margin-bottom: clamp(24px, 4vw, 40px);
     }
-    .card { 
-      background: white; 
-      border-left: 5px solid var(--dorado); 
-      padding: 20px; 
-      border-radius: 8px; 
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+
+    .card {
+      background: white;
+      border-left: 4px solid var(--dorado);
+      padding: 24px 22px;
+      border-radius: 10px;
+      box-shadow: var(--sombra-suave);
+      transition: transform var(--transicion), box-shadow var(--transicion), border-color var(--transicion);
+      animation: entrada 0.6s var(--transicion) both;
     }
-    .card h3 { 
-      color: var(--verde-esmeralda); 
-      margin: 0 0 10px 0; 
-      font-size: 0.9em; 
-      text-transform: uppercase; 
+    .card:nth-child(1) { animation-delay: 0.08s; }
+    .card:nth-child(2) { animation-delay: 0.16s; }
+    .card:nth-child(3) { animation-delay: 0.24s; }
+    .card:nth-child(4) { animation-delay: 0.32s; }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--sombra-elevada);
+      border-left-color: var(--verde-esmeralda);
     }
-    .valor { 
-      font-size: 1.8em; 
-      font-weight: bold; 
+
+    .card h3 {
+      color: var(--verde-esmeralda);
+      margin: 0 0 12px 0;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
-    .graficos { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
-      gap: 30px; 
+    .valor {
+      font-size: clamp(1.5rem, 3.5vw, 1.9rem);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
     }
-    .chart-box { 
-      background: white; 
-      padding: 20px; 
-      border-radius: 8px; 
-      border-top: 4px solid var(--verde-esmeralda); 
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+    .valor .unidad {
+      font-size: 0.5em;
+      font-weight: 500;
+      color: #666;
+      margin-left: 4px;
+    }
+
+    /* ===== Gráficos ===== */
+    .graficos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+      gap: clamp(18px, 3vw, 32px);
+    }
+    .chart-box {
+      background: white;
+      padding: clamp(16px, 3vw, 26px);
+      border-radius: 10px;
+      border-top: 4px solid var(--verde-esmeralda);
+      box-shadow: var(--sombra-suave);
+      transition: box-shadow var(--transicion);
+      animation: entrada 0.7s var(--transicion) 0.35s both;
+    }
+    .chart-box:hover { box-shadow: var(--sombra-elevada); }
+    .chart-box h3 {
+      font-family: 'Marcellus', serif;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--negro);
+      margin: 0 0 16px 0;
+    }
+    .chart-box canvas { max-height: 320px; }
+
+    /* ===== Skeleton loader ===== */
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: #EFECE4;
+      border-radius: 6px;
+      min-height: 20px;
+    }
+    .skeleton::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.18), transparent);
+      animation: brillo 1.4s infinite;
+    }
+    .skeleton-card { height: 110px; border-radius: 10px; }
+    .skeleton-chart { height: 300px; border-radius: 10px; }
+
+    /* ===== Aviso de espera (cold start de Render) ===== */
+    .aviso-espera {
+      display: none;
+      margin: 0 0 20px 0;
+      padding: 12px 16px;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      color: var(--negro);
+      animation: entrada 0.4s var(--transicion) both;
+    }
+    .aviso-espera.visible { display: block; }
+
+    /* ===== Estado de error ===== */
+    .error-box {
+      display: none;
+      background: white;
+      border-left: 4px solid #B3261E;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: var(--sombra-suave);
+      margin-bottom: 24px;
+    }
+    .error-box.visible { display: block; animation: entrada 0.4s var(--transicion) both; }
+    .error-box h3 { margin: 0 0 8px 0; color: #B3261E; font-size: 1rem; }
+    .error-box p { margin: 0 0 16px 0; font-size: 0.9rem; font-weight: 400; color: rgba(26,26,26,0.75); }
+    .btn-reintentar {
+      background: var(--verde-esmeralda);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transicion), transform var(--transicion);
+    }
+    .btn-reintentar:hover { background: #05780A; transform: translateY(-2px); }
+    .btn-reintentar:focus-visible { outline: 3px solid var(--dorado); outline-offset: 2px; }
+
+    /* ===== Animaciones ===== */
+    @keyframes entrada {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes brillo {
+      to { transform: translateX(100%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ===== Móvil ===== */
+    @media (max-width: 480px) {
+      .grid-kpis { grid-template-columns: 1fr; }
+      .card { padding: 18px; }
     }
   </style>
 </head>
 <body>
 
   <div class="header">
+    <p class="eyebrow">Business Intelligence · Benchmarks B2B</p>
     <h1>Transformación de Superficies</h1>
-    <p>Monitoreo de Mercado y Benchmarks (2025-2026)</p>
+    <p>Monitoreo de Mercado y Benchmarks (2025–2026)</p>
+  </div>
+
+  <div class="aviso-espera" id="avisoEspera">
+    ⏳ El servidor de datos está iniciando (plan gratuito de Render). Esto puede tardar hasta un minuto la primera vez.
+  </div>
+
+  <div class="error-box" id="errorBox">
+    <h3>No se pudieron cargar los datos</h3>
+    <p id="errorDetalle">Verifique la conexión con el servidor e intente nuevamente.</p>
+    <button class="btn-reintentar" onclick="cargarDashboard()">Reintentar</button>
   </div>
 
   <div class="grid-kpis" id="kpis">
-    <!-- El contenedor de KPIs se alimenta dinámicamente desde el backend -->
+    <!-- Skeletons mientras carga; el backend alimenta este contenedor -->
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
   </div>
 
-  <div class="graficos">
+  <div class="graficos" id="graficos">
     <div class="chart-box">
       <h3>Inversión vs Ingresos (USD)</h3>
-      <canvas id="chart1"></canvas>
+      <div class="skeleton skeleton-chart" id="skel1"></div>
+      <canvas id="chart1" style="display:none;"></canvas>
     </div>
     <div class="chart-box">
       <h3>Cuota de Mercado: Granito vs Otras Superficies</h3>
-      <canvas id="chart2"></canvas>
+      <div class="skeleton skeleton-chart" id="skel2"></div>
+      <canvas id="chart2" style="display:none;"></canvas>
     </div>
   </div>
 
   <script>
-    // Enlace de tu backend en Render ejecutando Python
+    // Enlace de backend en Render ejecutando Python
+    // (URL corregida: antes estaba envuelta en sintaxis Markdown y el fetch fallaba)
     const URL_BACKEND = "https://dashboard-marmol.onrender.com/api/benchmarks";
 
+    let timerAviso = null;
+    let charts = [];
+
+    // Animación de conteo para los valores de los KPIs (capa de presentación)
+    function animarValor(elemento, valorFinal) {
+      const esNumero = !isNaN(parseFloat(valorFinal)) && isFinite(valorFinal);
+      if (!esNumero) { elemento.textContent = valorFinal; return; }
+
+      const duracion = 900;
+      const inicio = performance.now();
+      const final = parseFloat(valorFinal);
+      const decimales = String(valorFinal).includes('.') ? 1 : 0;
+
+      function paso(ahora) {
+        const progreso = Math.min((ahora - inicio) / duracion, 1);
+        const suavizado = 1 - Math.pow(1 - progreso, 3); // ease-out cúbico
+        elemento.textContent = (final * suavizado).toLocaleString('es-CO', {
+          minimumFractionDigits: decimales, maximumFractionDigits: decimales
+        });
+        if (progreso < 1) requestAnimationFrame(paso);
+      }
+      requestAnimationFrame(paso);
+    }
+
+    function mostrarError(mensaje) {
+      document.getElementById('errorDetalle').textContent = mensaje;
+      document.getElementById('errorBox').classList.add('visible');
+    }
+
+    function limpiarEstadoUI() {
+      clearTimeout(timerAviso);
+      document.getElementById('avisoEspera').classList.remove('visible');
+      document.getElementById('errorBox').classList.remove('visible');
+      charts.forEach(c => c.destroy());
+      charts = [];
+    }
+
     async function cargarDashboard() {
+      limpiarEstadoUI();
+
+      // Si el backend tarda más de 6 s, avisar sobre el cold start de Render
+      timerAviso = setTimeout(() => {
+        document.getElementById('avisoEspera').classList.add('visible');
+      }, 6000);
+
       try {
         const respuesta = await fetch(URL_BACKEND);
-        
-        // Verificación de integridad de la respuesta HTTP
         if (!respuesta.ok) {
           throw new Error(`Error HTTP: ${respuesta.status}`);
         }
-        
+
         const datos = await respuesta.json();
-        
-        // 1. Renderizado de KPIs en pantalla
+
+        clearTimeout(timerAviso);
+        document.getElementById('avisoEspera').classList.remove('visible');
+
+        // Renderizado de KPIs en pantalla
         const contenedor = document.getElementById('kpis');
+        contenedor.innerHTML = ''; // retirar skeletons
         const metricasClave = ['Tamaño del Mercado', 'Margen Bruto', 'Overhead por SqFt'];
-        
+
         datos.forEach(item => {
-          if(metricasClave.includes(item.Métrica)) {
-            contenedor.innerHTML += `
-              <div class="card">
-                <h3>${item.Métrica}</h3>
-                <div class="valor">${item.Valor_Maximo} <span style="font-size:0.5em; color:#666;">${item.Unidad}</span></div>
-              </div>`;
+          if (metricasClave.includes(item.Métrica)) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+              <h3>${item.Métrica}</h3>
+              <div class="valor"><span class="num"></span><span class="unidad">${item.Unidad ?? ''}</span></div>`;
+            contenedor.appendChild(card);
+            animarValor(card.querySelector('.num'), item.Valor_Maximo);
           }
         });
 
-        // 2. Gráfico de Barras: Métricas Financieras
+        // Mostrar canvas, ocultar skeletons de gráficos
+        document.getElementById('skel1').style.display = 'none';
+        document.getElementById('skel2').style.display = 'none';
+        document.getElementById('chart1').style.display = 'block';
+        document.getElementById('chart2').style.display = 'block';
+
+        // Gráfico de Barras
         const ingresoMax = datos.find(d => d.Métrica === 'Ingreso Anual Promedio').Valor_Maximo;
         const capex = datos.find(d => d.Métrica === 'Inversión Inicial (CapEx)').Valor_Maximo;
-        
-        new Chart(document.getElementById('chart1'), {
+
+        charts.push(new Chart(document.getElementById('chart1'), {
           type: 'bar',
           data: {
             labels: ['Ingreso Máximo Potencial', 'CapEx Inicial Maquinaria'],
             datasets: [{
               data: [ingresoMax, capex],
               backgroundColor: ['#046307', '#1A1A1A'],
-              borderRadius: 4
+              borderRadius: 6,
+              hoverBackgroundColor: ['#D4AF37', '#D4AF37']
             }]
           },
-          options: { 
+          options: {
             responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
+            animation: { duration: 1100, easing: 'easeOutQuart' },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#1A1A1A',
+                titleFont: { family: 'Inter' },
+                bodyFont: { family: 'Inter' },
+                padding: 12,
+                cornerRadius: 8,
+                callbacks: {
+                  label: ctx => ' USD ' + ctx.parsed.y.toLocaleString('es-CO')
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(26,26,26,0.06)' },
+                ticks: { font: { family: 'Inter' }, callback: v => v.toLocaleString('es-CO') }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { font: { family: 'Inter', weight: '500' } }
+              }
+            }
           }
-        });
+        }));
 
-        // 3. Gráfico Doughnut: Participación de Materiales
+        // Gráfico Doughnut
         const granito = datos.find(d => d.Métrica === 'Granito (Cuota)').Valor_Maximo;
-        new Chart(document.getElementById('chart2'), {
+        charts.push(new Chart(document.getElementById('chart2'), {
           type: 'doughnut',
           data: {
             labels: ['Granito', 'Otras Superficies'],
-            datasets: [{ 
-              data: [granito, 100 - granito], 
+            datasets: [{
+              data: [granito, 100 - granito],
               backgroundColor: ['#D4AF37', '#1A1A1A'],
               borderColor: '#FDFBF7',
-              borderWidth: 3
+              borderWidth: 3,
+              hoverOffset: 10
             }]
           },
           options: {
             responsive: true,
             cutout: '65%',
+            animation: { animateRotate: true, duration: 1200, easing: 'easeOutQuart' },
             plugins: {
-              legend: { position: 'bottom' }
+              legend: {
+                position: 'bottom',
+                labels: { font: { family: 'Inter', size: 13 }, padding: 18, usePointStyle: true }
+              },
+              tooltip: {
+                backgroundColor: '#1A1A1A',
+                padding: 12,
+                cornerRadius: 8,
+                callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` }
+              }
             }
           }
-        });
+        }));
 
       } catch (error) {
         console.error("Fallo de conexión con la API:", error);
+        clearTimeout(timerAviso);
+        document.getElementById('avisoEspera').classList.remove('visible');
+        mostrarError(`Detalle técnico: ${error.message}. Si el servidor estaba dormido (Render free), espere unos segundos y reintente.`);
       }
     }
-    
-    // Inicialización del despliegue
+
     cargarDashboard();
   </script>
 </body>
