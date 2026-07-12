@@ -1,4 +1,4 @@
 Flask
 pandas
-gdown
 Flask-CORS
+gunicorn
