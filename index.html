@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Benchmarks · Industria de la Piedra</title>
+  <title>Benchmarks de Industrias · Observatorio de Mercados</title>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -37,7 +37,7 @@
       position: relative;
     }
 
-    /* ===== Fondo con profundidad: luces suaves que el vidrio difumina ===== */
+    /* ===== Fondo con profundidad ===== */
     .fondo-decorativo {
       position: fixed;
       inset: 0;
@@ -50,7 +50,6 @@
         radial-gradient(ellipse 50% 40% at 90% 90%, rgba(212, 175, 55, 0.16), transparent 65%),
         var(--blanco-crema);
     }
-    /* Vetas de mármol sutiles */
     .fondo-decorativo::after {
       content: '';
       position: absolute;
@@ -63,7 +62,6 @@
       background-size: 900px 900px, 700px 700px, 1100px 1100px;
     }
 
-    /* Línea dorada superior */
     body::before {
       content: '';
       position: fixed;
@@ -73,26 +71,11 @@
       z-index: 100;
     }
 
-    /* ===== Receta base de vidrio ===== */
-    .glass {
-      background: var(--vidrio);
-      -webkit-backdrop-filter: blur(14px) saturate(1.35);
-      backdrop-filter: blur(14px) saturate(1.35);
-      border: 1px solid var(--vidrio-borde);
-      border-top-color: rgba(255, 255, 255, 0.9);
-      box-shadow: var(--sombra-vidrio), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-      border-radius: 16px;
-    }
-    /* Navegadores sin soporte de blur: vidrio más opaco para mantener legibilidad */
-    @supports not (backdrop-filter: blur(1px)) {
-      .glass { background: rgba(255, 255, 255, 0.88); }
-    }
-
     /* ===== Header ===== */
     .header {
       border-bottom: 1px solid var(--vidrio-borde-dorado);
       padding-bottom: 20px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       animation: entrada 0.6s var(--transicion) both;
     }
     .eyebrow {
@@ -118,7 +101,49 @@
       margin: 8px 0 0 0;
     }
 
-    /* ===== Veredicto: vidrio oscuro esmeralda ===== */
+    /* ===== Selector de industria ===== */
+    .selector-industria {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 6px 2px 14px 2px;
+      margin-bottom: 20px;
+      -webkit-overflow-scrolling: touch;
+      animation: entrada 0.6s var(--transicion) 0.05s both;
+    }
+    .selector-industria::-webkit-scrollbar { height: 4px; }
+    .selector-industria::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.4); border-radius: 4px; }
+    .ind-chip {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--vidrio);
+      -webkit-backdrop-filter: blur(12px) saturate(1.3);
+      backdrop-filter: blur(12px) saturate(1.3);
+      border: 1.5px solid var(--vidrio-borde);
+      border-radius: 14px;
+      padding: 12px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--negro);
+      cursor: pointer;
+      transition: all var(--transicion);
+      white-space: nowrap;
+      box-shadow: var(--sombra-vidrio);
+    }
+    .ind-chip .emoji { font-size: 1.15rem; }
+    .ind-chip:hover { transform: translateY(-2px); border-color: var(--dorado); }
+    .ind-chip:focus-visible { outline: 3px solid var(--dorado); outline-offset: 2px; }
+    .ind-chip.activo {
+      background: linear-gradient(135deg, rgba(6, 61, 8, 0.94), rgba(4, 99, 7, 0.9));
+      border-color: rgba(243, 229, 176, 0.5);
+      color: white;
+      box-shadow: 0 8px 22px rgba(4, 99, 7, 0.32);
+    }
+
+    /* ===== Veredicto ===== */
     .veredicto {
       position: relative;
       overflow: hidden;
@@ -131,9 +156,8 @@
       padding: clamp(18px, 3.5vw, 28px);
       margin-bottom: 24px;
       box-shadow: var(--sombra-vidrio);
-      animation: entrada 0.6s var(--transicion) 0.05s both;
+      animation: entrada 0.6s var(--transicion) both;
     }
-    /* Destello diagonal tipo cristal */
     .veredicto::before {
       content: '';
       position: absolute;
@@ -170,7 +194,7 @@
     }
     .senal:hover { background: rgba(255,255,255,0.24); transform: translateY(-2px); }
 
-    /* ===== KPIs de vidrio ===== */
+    /* ===== KPIs ===== */
     .grid-kpis {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -193,9 +217,9 @@
     @supports not (backdrop-filter: blur(1px)) {
       .card { background: rgba(255, 255, 255, 0.88); }
     }
-    .card:nth-child(1) { animation-delay: 0.1s; }
-    .card:nth-child(2) { animation-delay: 0.18s; }
-    .card:nth-child(3) { animation-delay: 0.26s; }
+    .card:nth-child(1) { animation-delay: 0.08s; }
+    .card:nth-child(2) { animation-delay: 0.16s; }
+    .card:nth-child(3) { animation-delay: 0.24s; }
     .card:hover {
       transform: translateY(-5px);
       box-shadow: var(--sombra-elevada), inset 0 1px 0 rgba(255,255,255,0.7);
@@ -223,7 +247,7 @@
       line-height: 1.4;
     }
 
-    /* ===== Barra de filtros: vidrio pegajoso al hacer scroll ===== */
+    /* ===== Filtros por categoría ===== */
     .filtros {
       position: sticky;
       top: 10px;
@@ -240,7 +264,6 @@
       border-radius: 999px;
       box-shadow: var(--sombra-vidrio);
       -webkit-overflow-scrolling: touch;
-      animation: entrada 0.6s var(--transicion) 0.3s both;
     }
     @supports not (backdrop-filter: blur(1px)) {
       .filtros { background: rgba(253, 251, 247, 0.95); }
@@ -270,7 +293,7 @@
       box-shadow: 0 4px 14px rgba(4, 99, 7, 0.35);
     }
 
-    /* ===== Paneles de gráficos de vidrio ===== */
+    /* ===== Paneles ===== */
     .graficos {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
@@ -295,7 +318,6 @@
     @supports not (backdrop-filter: blur(1px)) {
       .panel { background: rgba(255, 255, 255, 0.9); }
     }
-    /* Destello de cristal en la esquina */
     .panel::before {
       content: '';
       position: absolute;
@@ -353,7 +375,7 @@
       text-align: center;
     }
 
-    /* ===== Skeletons / estados ===== */
+    /* ===== Estados ===== */
     .skeleton {
       position: relative;
       overflow: hidden;
@@ -428,12 +450,11 @@
       }
     }
 
-    /* ===== Móvil: blur más liviano para no exigir al teléfono ===== */
     @media (max-width: 520px) {
       .grid-kpis { grid-template-columns: 1fr; }
       .graficos { grid-template-columns: 1fr; }
       .panel canvas { max-height: 230px; }
-      .card, .panel, .filtros {
+      .card, .panel, .filtros, .ind-chip {
         -webkit-backdrop-filter: blur(9px) saturate(1.25);
         backdrop-filter: blur(9px) saturate(1.25);
       }
@@ -441,13 +462,17 @@
     }
   </style>
 </head>
-<body>\n\n  <div class="fondo-decorativo"></div>
+<body>
+
+  <div class="fondo-decorativo"></div>
 
   <div class="header">
-    <p class="eyebrow">Business Intelligence · Benchmarks B2B</p>
-    <h1>Transformación de Superficies</h1>
+    <p class="eyebrow">Business Intelligence · Observatorio de Mercados</p>
+    <h1 id="tituloIndustria">Benchmarks de Industrias</h1>
     <p>¿Vale la pena entrar a este mercado? Los números, explicados en simple.</p>
   </div>
+
+  <div class="selector-industria" id="selectorIndustria"></div>
 
   <div class="aviso-espera" id="avisoEspera">
     ⏳ El servidor de datos está iniciando. Esto puede tardar hasta un minuto la primera vez.
@@ -459,7 +484,6 @@
     <button class="btn-reintentar" onclick="cargarDashboard()">Reintentar</button>
   </div>
 
-  <!-- Contenido dinámico -->
   <div id="contenido">
     <div class="skeleton" style="height:120px; margin-bottom:24px;"></div>
     <div class="grid-kpis">
@@ -471,7 +495,7 @@
     </div>
   </div>
 
-  <p class="fuente">Fuente: Benchmarks_Industria_Piedra_2025 · Actualización automática desde la base de datos</p>
+  <p class="fuente">Fuente: Benchmarks_Industria_Piedra_2025 · Datos de mercado 2024–2026 · Actualización automática desde la base de datos</p>
 
   <script>
     // Enlace de backend en Render ejecutando Python
@@ -479,27 +503,300 @@
 
     let timerAviso = null;
     let charts = [];
+    let datosGlobales = [];
+    let industriaActiva = null;
 
     // ---------- Utilidades ----------
     const fmt = (n, dec = 0) => Number(n).toLocaleString('es-CO', {
       minimumFractionDigits: dec, maximumFractionDigits: dec
     });
 
-    // Busca una métrica por nombre; devuelve null si no existe (a prueba de cambios en la hoja)
-    const buscar = (datos, nombre) => datos.find(d => d['Métrica'] === nombre) ?? null;
+    // Busca una métrica de la industria activa (null si no existe)
+    const M = (nombre) => datosGlobales.find(d =>
+      (d['Industria'] ?? 'Piedra y Superficies') === industriaActiva && d['Métrica'] === nombre
+    ) ?? null;
 
-    function fuenteChart() {
-      Chart.defaults.font.family = 'Inter';
-      Chart.defaults.color = '#1A1A1A';
-    }
+    const tooltipBase = { backgroundColor: '#1A1A1A', padding: 12, cornerRadius: 8 };
 
-    const tooltipBase = {
-      backgroundColor: '#1A1A1A',
-      padding: 12,
-      cornerRadius: 8
+    // =========================================================
+    //   CONFIGURACIÓN POR INDUSTRIA
+    //   (los VALORES vienen de la base de datos; aquí vive la
+    //    capa editorial: qué mostrar y cómo explicarlo)
+    // =========================================================
+    const CONFIG = {
+
+      'Piedra y Superficies': {
+        emoji: '🪨',
+        veredicto: {
+          titulo: 'Veredicto: mercado atractivo, pero exigente en operación',
+          texto: () => `Es una industria de <strong>US$ ${M('Tamaño del Mercado') ? fmt(M('Tamaño del Mercado').Valor_Maximo, 1) : '—'} mil millones</strong> que crece <strong>${M('Crecimiento (CAGR)') ? fmt(M('Crecimiento (CAGR)').Valor_Maximo, 1) : '—'}% al año</strong> y deja márgenes altos. La barrera es la inversión inicial y la exigencia de mantener las máquinas casi siempre ocupadas — el tipo de problema que se resuelve con buena información y control del negocio.`,
+          senales: ['✅ Mercado grande y en crecimiento', '✅ Márgenes de ganancia altos', '✅ Demanda concentrada y clara', '⚠️ Inversión inicial elevada', '⚠️ Exige eficiencia operativa']
+        },
+        kpis: [
+          { met: 'Tamaño del Mercado', label: 'Tamaño del mercado', unidad: 'mil millones USD', dec: 1, ctx: 'Ventas anuales mundiales de superficies de piedra.' },
+          { met: 'Crecimiento (CAGR)', label: 'Crecimiento anual', unidad: '% por año', dec: 1, ctx: 'Crece de forma constante hasta 2033. No es una moda.' },
+          { met: 'Margen Bruto', label: 'Margen bruto máximo', unidad: '%', dec: 0, ctx: 'Lo que queda de cada venta para cubrir gastos y ganar.' }
+        ],
+        graficos: [
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto factura un taller al año?',
+            tipo: 'minmax', mets: ['Ingreso Anual Promedio'], labels: ['Facturación anual'],
+            insight: () => { const m = M('Ingreso Anual Promedio'); return m ? `Un taller pequeño factura unos <strong>US$ ${fmt(m.Valor_Minimo)}</strong> al año, pero uno bien gestionado llega a <strong>US$ ${fmt(m.Valor_Maximo)}</strong> — ${fmt(m.Valor_Maximo / m.Valor_Minimo, 1)} veces más. La diferencia no es suerte: es gestión, tecnología y control de costos.` : ''; }
+          },
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿La inversión se recupera?',
+            tipo: 'compare',
+            items: () => {
+              const capex = M('Inversión Inicial (CapEx)'), ing = M('Ingreso Anual Promedio'), mar = M('Margen Bruto');
+              if (!capex || !ing || !mar) return null;
+              return [
+                { label: 'Inversión inicial', valor: capex.Valor_Maximo, color: '#1A1A1A' },
+                { label: 'Facturación máx./año', valor: ing.Valor_Maximo, color: '#046307' },
+                { label: 'Ganancia bruta máx./año', valor: ing.Valor_Maximo * mar.Valor_Maximo / 100, color: '#D4AF37' }
+              ];
+            },
+            formato: 'usd',
+            insight: () => {
+              const capex = M('Inversión Inicial (CapEx)'), ing = M('Ingreso Anual Promedio'), mar = M('Margen Bruto');
+              if (!capex || !ing || !mar) return '';
+              const gan = ing.Valor_Maximo * mar.Valor_Maximo / 100;
+              return `Entrar cuesta unos <strong>US$ ${fmt(capex.Valor_Maximo)}</strong> en maquinaria. Un taller de alto rendimiento genera hasta <strong>US$ ${fmt(gan)}</strong> de ganancia bruta al año: en el mejor escenario la inversión se recupera en <strong>${Math.ceil(capex.Valor_Maximo / gan * 12)} meses</strong>. En un taller promedio toma varios años — el rendimiento define todo.`;
+            }
+          },
+          {
+            cat: 'mercado', catLabel: 'Mercado · Material', titulo: '¿Qué material domina?',
+            tipo: 'dona', met: 'Granito (Cuota)', labels: ['Granito', 'Otros materiales (cuarzo, sinterizados, mármol)'],
+            insight: () => { const m = M('Granito (Cuota)'); return m ? `El granito lidera con <strong>${fmt(m.Valor_Maximo, 1)}%</strong>, pero <strong>${fmt(100 - m.Valor_Maximo, 1)}% del mercado son otros materiales</strong>. Quien solo trabaja granito deja dos tercios del mercado sobre la mesa.` : ''; }
+          },
+          {
+            cat: 'mercado', catLabel: 'Mercado · Aplicación', titulo: '¿Dónde se instala la piedra?',
+            tipo: 'dona', met: 'Cocinas', labels: ['Cocinas', 'Otros espacios (baños, pisos, fachadas)'],
+            insight: () => { const m = M('Cocinas'); return m ? `<strong>${fmt(m.Valor_Maximo, 1)} de cada 100 proyectos son cocinas.</strong> La demanda está clarísima: hay que hablar el idioma de la remodelación de cocinas — ahí está el cliente.` : ''; }
+          },
+          {
+            cat: 'operativo', catLabel: 'Operativo', titulo: 'La zona segura de las máquinas',
+            tipo: 'zona', met: 'Utilización de Maquinaria (Equilibrio)',
+            insight: () => {
+              const u = M('Utilización de Maquinaria (Equilibrio)'), o = M('Overhead por SqFt');
+              return u ? `Las máquinas deben trabajar al menos el <strong>${fmt(u.Valor_Minimo)}% del tiempo</strong> solo para no perder dinero${o ? ` (cada pie cuadrado carga US$ ${fmt(o.Valor_Maximo)} de gastos fijos)` : ''}. Por debajo de esa línea, el taller pierde plata aunque venda. <strong>Aquí medir el negocio deja de ser un lujo y se vuelve supervivencia.</strong>` : '';
+            }
+          }
+        ]
+      },
+
+      'Gastronomía': {
+        emoji: '🍔',
+        veredicto: {
+          titulo: 'Veredicto: mercado enorme, márgenes de milímetros',
+          texto: () => `El negocio de la comida mueve alrededor de <strong>US$ 1 billón al año solo en EEUU</strong>, pero es la industria de los márgenes delgados: de cada $100 vendidos quedan entre $3 y $9 de ganancia. Aquí no gana el que más vende — <strong>gana el que mejor controla sus costos</strong>, y eso solo se logra midiendo cada semana.`,
+          senales: ['✅ Demanda constante y universal', '✅ Barrera de entrada baja', '⚠️ Márgenes muy delgados (3–9%)', '⚠️ Solo 42% fueron rentables en 2024', '💡 El control de costos lo es todo']
+        },
+        kpis: [
+          { met: 'Tamaño del Mercado (Restaurantes EEUU)', label: 'Mercado restaurantes (EEUU)', unidad: 'mil millones USD', dec: 0, ctx: 'El sector restaurantes de EEUU como referencia global.' },
+          { met: 'Margen Neto Comida Rápida', label: 'Margen neto comida rápida', unidad: '% máximo', dec: 0, ctx: 'La comida rápida es el formato más rentable del sector.' },
+          { met: 'Restaurantes Rentables (EEUU)', label: 'Restaurantes rentables', unidad: '% en 2024', dec: 0, ctx: 'Menos de la mitad ganó dinero el año pasado.' }
+        ],
+        graficos: [
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto queda de ganancia según el formato?',
+            tipo: 'minmax', mets: ['Margen Neto Comida Rápida', 'Margen Neto Restaurante Servicio Completo'], labels: ['Comida rápida', 'Restaurante de mesa'],
+            insight: () => `La comida rápida gana más (<strong>6–9%</strong>) que el restaurante de mesa (<strong>3–8%</strong>) porque estandariza todo: menú corto, procesos repetibles, menos personal por venta. El formato del negocio decide el margen antes que la sazón.`
+          },
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿A dónde se va cada $100 de venta?',
+            tipo: 'compare',
+            items: () => {
+              const a = M('Costo de Alimentos'), l = M('Costo Laboral'), p = M('Costo Primo (Alimentos + Personal)');
+              if (!a || !l || !p) return null;
+              return [
+                { label: 'Ingredientes (máx.)', valor: a.Valor_Maximo, color: '#1A1A1A' },
+                { label: 'Personal (máx.)', valor: l.Valor_Maximo, color: '#D4AF37' },
+                { label: 'Ingredientes + Personal (tope sano)', valor: p.Valor_Maximo, color: '#046307' }
+              ];
+            },
+            formato: 'pct',
+            insight: () => `Ingredientes y personal juntos (el "costo primo") no deben pasar del <strong>65% de las ventas</strong> — arriba de eso, el negocio trabaja para sus proveedores. Los locales rentables miden este número <strong>cada semana</strong>, no cada mes.`
+          },
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto factura un local de comida rápida?',
+            tipo: 'minmax', mets: ['Facturación Anual Comida Rápida'], labels: ['Facturación anual'],
+            insight: () => { const m = M('Facturación Anual Comida Rápida'); return m ? `Entre <strong>US$ ${fmt(m.Valor_Minimo)}</strong> y <strong>US$ ${fmt(m.Valor_Maximo)}</strong> al año — una brecha de ${fmt(m.Valor_Maximo / m.Valor_Minimo, 0)} veces entre el local promedio y el de alto rendimiento. Ubicación, operación y datos hacen la diferencia.` : ''; }
+          },
+          {
+            cat: 'operativo', catLabel: 'Operativo', titulo: '¿Cuántos sobreviven?',
+            tipo: 'dona', met: 'Restaurantes Rentables (EEUU)', labels: ['Rentables', 'No rentables o en pérdida'],
+            insight: () => { const m = M('Restaurantes Rentables (EEUU)'); return m ? `Solo <strong>${fmt(m.Valor_Maximo)} de cada 100 restaurantes fueron rentables en 2024</strong>. Con márgenes de un dígito, un 2% de descuido en costos borra la ganancia del mes. <strong>Medir a tiempo es la diferencia entre estar en el 42% o en el 58%.</strong>` : ''; }
+          }
+        ]
+      },
+
+      'Hotelería': {
+        emoji: '🏨',
+        veredicto: {
+          titulo: 'Veredicto: industria gigante que vive de dos números',
+          texto: () => `La hospitalidad mueve <strong>US$ 4.9 billones al año en el mundo</strong> y todo hotel vive de dos números: cuántas noches vende (ocupación) y a qué precio (tarifa). El enemigo silencioso son los intermediarios, que cobran hasta <strong>25% de comisión por reserva</strong>. Quien controla sus datos y su canal directo, controla su margen.`,
+          senales: ['✅ Mercado masivo y global', '✅ Turismo en Colombia en alza', '⚠️ 1 de cada 3 noches queda vacía', '⚠️ Intermediarios cobran 15–25%', '💡 Precios dinámicos = ventaja directa']
+        },
+        kpis: [
+          { met: 'Tamaño del Mercado (Hospitalidad)', label: 'Mercado global', unidad: 'mil millones USD', dec: 0, ctx: 'Todo lo que mueve la hospitalidad mundial al año.' },
+          { met: 'Ocupación Promedio (EEUU)', label: 'Ocupación promedio', unidad: '%', dec: 1, ctx: 'De cada 100 noches disponibles, cuántas se venden.' },
+          { met: 'Margen Operativo Bruto (GOP)', label: 'Margen operativo', unidad: '%', dec: 1, ctx: 'Lo que queda tras pagar la operación del hotel.' }
+        ],
+        graficos: [
+          {
+            cat: 'operativo', catLabel: 'Operativo', titulo: 'El termómetro del hotel: la ocupación',
+            tipo: 'dona', met: 'Ocupación Promedio (EEUU)', labels: ['Noches vendidas', 'Noches vacías'],
+            insight: () => { const m = M('Ocupación Promedio (EEUU)'); return m ? `En promedio, <strong>${fmt(100 - m.Valor_Maximo, 1)} de cada 100 noches la habitación duerme vacía</strong> — y una noche no vendida no se recupera jamás, a diferencia de un producto en bodega. Por eso los hoteles que ajustan precios según la demanda le ganan a los de tarifa fija.` : ''; }
+          },
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto cobra un hotel por noche?',
+            tipo: 'minmax', mets: ['Tarifa Diaria Promedio (ADR)'], labels: ['Tarifa por noche'],
+            insight: () => { const m = M('Tarifa Diaria Promedio (ADR)'); return m ? `Desde <strong>US$ ${fmt(m.Valor_Minimo)}</strong> en hoteles económicos hasta <strong>US$ ${fmt(m.Valor_Maximo)}+</strong> en lujo. Desde 2023, el crecimiento del sector viene de subir tarifa, no de llenar más — el que sabe <strong>cuánto cobrar cada día</strong> gana la partida.` : ''; }
+          },
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto queda de ganancia operativa?',
+            tipo: 'dona', met: 'Margen Operativo Bruto (GOP)', labels: ['Ganancia operativa', 'Costos de operación'],
+            insight: () => { const m = M('Margen Operativo Bruto (GOP)'); return m ? `De cada $100 que entran, quedan <strong>$${fmt(m.Valor_Maximo, 1)} de ganancia operativa</strong> — un margen sano, pero que los costos de personal y energía están mordiendo año tras año. Los hoteles que ajustan turnos según la ocupación proyectada protegen este número.` : ''; }
+          },
+          {
+            cat: 'operativo', catLabel: 'Operativo', titulo: 'El peaje de los intermediarios',
+            tipo: 'compare',
+            items: () => {
+              const ota = M('Comisión de Intermediarios (OTAs)'), dir = M('Costo de Venta Directa (Web Propia)');
+              if (!ota || !dir) return null;
+              return [
+                { label: 'Reserva por Booking/Expedia (máx.)', valor: ota.Valor_Maximo, color: '#1A1A1A' },
+                { label: 'Reserva por web propia', valor: dir.Valor_Maximo, color: '#046307' }
+              ];
+            },
+            formato: 'pct',
+            insight: () => { const ota = M('Comisión de Intermediarios (OTAs)'), dir = M('Costo de Venta Directa (Web Propia)'); return (ota && dir) ? `Cada reserva que entra por un intermediario cuesta hasta <strong>${fmt(ota.Valor_Maximo)}% de comisión</strong>; por la web propia, cerca del <strong>${fmt(dir.Valor_Maximo)}%</strong>. Es decir, vender directo puede ser <strong>${fmt(ota.Valor_Maximo / dir.Valor_Maximo)} veces más barato</strong>. Presencia digital propia no es vanidad: es margen puro.` : ''; }
+          }
+        ]
+      },
+
+      'Medicina': {
+        emoji: '🏥',
+        veredicto: {
+          titulo: 'Veredicto: negocio sólido que sangra por la agenda',
+          texto: () => `Un consultorio bien manejado deja márgenes del <strong>10 al 20%</strong> (las clínicas dentales llegan al 40%), con médicos que generan entre medio millón y un millón de dólares al año. Su fuga silenciosa no es la competencia: es la <strong>silla vacía</strong> — pacientes que no llegan a la cita y cuentas que nunca se cobran.`,
+          senales: ['✅ Demanda estable y creciente', '✅ Márgenes sólidos bien gestionado', '⚠️ Hasta 30% de citas incumplidas', '⚠️ Pérdidas de US$ 20–30 mil/mes por inasistencias', '💡 Recordatorios y datos recuperan ese dinero']
+        },
+        kpis: [
+          { met: 'Margen EBITDA Consultorio Médico', label: 'Margen de un consultorio', unidad: '% máximo', dec: 0, ctx: 'Un consultorio sano convierte 10–20% en ganancia.' },
+          { met: 'Ingreso Anual por Médico', label: 'Ingreso por médico', unidad: 'USD máx./año', dec: 0, ctx: 'Lo que genera cada profesional en un año.' },
+          { met: 'Tasa de Inasistencia de Pacientes (No-Show)', label: 'Citas incumplidas', unidad: '% máximo', dec: 0, ctx: 'En algunas especialidades, 3 de cada 10 no llegan.' }
+        ],
+        graficos: [
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto gana un consultorio vs una clínica dental?',
+            tipo: 'minmax', mets: ['Margen EBITDA Consultorio Médico', 'Margen Neto Clínica Dental'], labels: ['Consultorio médico', 'Clínica dental'],
+            insight: () => `Las clínicas dentales ganan el doble (<strong>30–40%</strong> vs 10–20%) por una razón de negocio, no de medicina: cobran de contado o en días, mientras el consultorio médico espera semanas a las aseguradoras. <strong>El flujo de caja define el margen.</strong>`
+          },
+          {
+            cat: 'operativo', catLabel: 'Operativo', titulo: 'La silla vacía: pacientes que no llegan',
+            tipo: 'minmax', mets: ['Tasa de Inasistencia de Pacientes (No-Show)'], labels: ['Citas incumplidas'],
+            insight: () => { const m = M('Tasa de Inasistencia de Pacientes (No-Show)'), p = M('Pérdida Mensual por Inasistencias'); return m ? `Entre <strong>${fmt(m.Valor_Minimo)}% y ${fmt(m.Valor_Maximo)}%</strong> de las citas se incumplen${p ? `, lo que cuesta entre <strong>US$ ${fmt(p.Valor_Minimo)} y ${fmt(p.Valor_Maximo)} al mes</strong> por consultorio` : ''}. La renta, el personal y los equipos se pagan igual con la silla vacía. <strong>Recordatorios automáticos y listas de espera inteligentes recuperan gran parte de esa plata.</strong>` : ''; }
+          },
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto genera cada médico al año?',
+            tipo: 'minmax', mets: ['Ingreso Anual por Médico'], labels: ['Ingreso por médico'],
+            insight: () => { const m = M('Ingreso Anual por Médico'); return m ? `Cada profesional genera entre <strong>US$ ${fmt(m.Valor_Minimo)} y US$ ${fmt(m.Valor_Maximo)}</strong> al año. La diferencia entre el piso y el techo está en la densidad de la agenda: cada hora sin paciente es dinero que la clínica ya gastó.` : ''; }
+          },
+          {
+            cat: 'operativo', catLabel: 'Operativo', titulo: '¿Se cobra todo lo que se trabaja?',
+            tipo: 'minmax', mets: ['Tasa de Cobro Efectivo'], labels: ['Tasa de cobro'],
+            insight: () => { const m = M('Tasa de Cobro Efectivo'), d = M('Días de Cartera (Cuentas por Cobrar)'); return m ? `Un consultorio sano cobra al menos el <strong>${fmt(m.Valor_Minimo)}%</strong> de lo facturado; los mejores llegan al <strong>${fmt(m.Valor_Maximo)}%</strong>${d ? ` y recuperan su cartera en menos de <strong>${fmt(d.Valor_Maximo)} días</strong>` : ''}. Cada punto por debajo es trabajo médico regalado — y solo se detecta si alguien lo está midiendo.` : ''; }
+          }
+        ]
+      },
+
+      'Joyería': {
+        emoji: '💍',
+        veredicto: {
+          titulo: 'Veredicto: márgenes de lujo, capital dormido en vitrina',
+          texto: () => `La joyería mueve entre <strong>US$ 243 y 381 mil millones al año</strong> con márgenes brutos del <strong>40 al 60%</strong> — de los mejores del comercio. Su talón de Aquiles: el inventario rota apenas <strong>1 vez al año</strong> (la ropa rota 4–6 veces). Cada pieza equivocada en vitrina es capital congelado durante meses.`,
+          senales: ['✅ Márgenes brutos de 40–60%', '✅ Mercado creciendo ~5% anual', '⚠️ Inventario carísimo y lento', '⚠️ Precio del oro en máximos históricos', '💡 Saber qué pieza rota y cuál no = oro puro']
+        },
+        kpis: [
+          { met: 'Tamaño del Mercado', label: 'Mercado global', unidad: 'mil millones USD', dec: 1, ctx: 'Ventas mundiales de joyería al año.' },
+          { met: 'Margen Bruto Joyería Fina', label: 'Margen bruto', unidad: '% máximo', dec: 0, ctx: 'De cada $100 vendidos, hasta $60 quedan brutos.' },
+          { met: 'Rotación de Inventario Anual', label: 'Rotación de inventario', unidad: 'veces/año', dec: 1, ctx: 'El inventario se vende apenas 1–1.5 veces al año.' }
+        ],
+        graficos: [
+          {
+            cat: 'mercado', catLabel: 'Mercado', titulo: '¿Qué tan grande es el negocio?',
+            tipo: 'minmax', mets: ['Tamaño del Mercado'], labels: ['Mercado global (mil millones)'],
+            insight: () => { const c = M('Crecimiento (CAGR)'); return `Las mediciones del mercado van de <strong>US$ 243 a 381 mil millones</strong> según la fuente — y todas coinciden en que crece <strong>${c ? fmt(c.Valor_Minimo, 1) + '–' + fmt(c.Valor_Maximo, 1) : '~5'}% al año</strong>, empujado por Asia y por la venta online. No es un mercado de nicho: es lujo masivo.`; }
+          },
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Qué margen deja cada pieza?',
+            tipo: 'minmax', mets: ['Margen Bruto Joyería Fina'], labels: ['Margen bruto'],
+            insight: () => { const m = M('Margen Bruto Joyería Fina'); return m ? `La joyería fina deja entre <strong>${fmt(m.Valor_Minimo)}% y ${fmt(m.Valor_Maximo)}%</strong> de margen bruto — y el trabajo a medida y las reparaciones superan el 60%. El riesgo: con el oro en máximos, una pieza cotizada con el precio del metal de hace 6 meses puede perder 10–15 puntos de margen <strong>sin que nadie lo note hasta el cierre del mes</strong>.` : ''; }
+          },
+          {
+            cat: 'operativo', catLabel: 'Operativo', titulo: 'El dinero dormido en la vitrina',
+            tipo: 'minmax', mets: ['Rotación de Inventario Anual'], labels: ['Rotación anual'],
+            insight: () => `Una joyería vende su inventario completo apenas <strong>1 a 1.5 veces al año</strong>, contra 4–6 veces en moda. Traducción: el capital duerme meses en vitrina. Saber con datos <strong>cuál categoría rota y cuál acumula polvo</strong> es la decisión de compra más rentable del negocio.`
+          },
+          {
+            cat: 'mercado', catLabel: 'Mercado', titulo: '¿Dónde se vende la joyería?',
+            tipo: 'dona', met: 'Venta en Tienda Física (Cuota)', labels: ['Tienda física', 'Canal online'],
+            insight: () => { const m = M('Venta en Tienda Física (Cuota)'), a = M('Anillos (Cuota de Ventas)'); return m ? `La tienda física domina con <strong>${fmt(m.Valor_Maximo, 1)}%</strong> — la confianza se construye en persona — pero el canal online es el que más rápido crece. ${a ? `Y un dato para la vitrina: <strong>los anillos son ${fmt(a.Valor_Maximo, 1)}% de las ventas</strong> — el mercado de bodas y compromisos nunca pasa de moda.` : ''}` : ''; }
+          }
+        ]
+      },
+
+      'Inmobiliaria': {
+        emoji: '🏠',
+        veredicto: {
+          titulo: 'Veredicto: mercado colosal donde gana el que responde primero',
+          texto: () => `El sector inmobiliario mueve más de <strong>US$ 4 billones al año</strong> con comisiones del 5–6% por venta. El secreto incómodo: el agente promedio convierte apenas el <strong>1% de sus contactos</strong>, mientras los mejores convierten 3–9% — con los mismos prospectos. La diferencia no es el mercado: es el seguimiento.`,
+          senales: ['✅ Mercado gigantesco (US$ 4+ billones)', '✅ Comisiones altas por transacción', '⚠️ Agente promedio convierte solo ~1%', '⚠️ Ciclos de venta de 4–6 meses', '💡 Responder en 5 minutos multiplica el cierre']
+        },
+        kpis: [
+          { met: 'Tamaño del Mercado', label: 'Mercado global', unidad: 'mil millones USD', dec: 0, ctx: 'El sector inmobiliario mundial de servicios y transacciones.' },
+          { met: 'Comisión de Venta Típica', label: 'Comisión por venta', unidad: '% máximo', dec: 0, ctx: 'Lo que deja cada transacción cerrada.' },
+          { met: 'Conversión de Prospectos (Agente Promedio)', label: 'Conversión promedio', unidad: '% máximo', dec: 1, ctx: 'De cada 100 interesados, ~1 termina comprando con el agente.' }
+        ],
+        graficos: [
+          {
+            cat: 'mercado', catLabel: 'Mercado', titulo: 'Un mercado de billones',
+            tipo: 'minmax', mets: ['Tamaño del Mercado'], labels: ['Mercado global (mil millones)'],
+            insight: () => { const c = M('Crecimiento (CAGR)'); return `Más de <strong>US$ 4 billones al año</strong> creciendo ${c ? `entre <strong>${fmt(c.Valor_Minimo, 1)}% y ${fmt(c.Valor_Maximo, 1)}%</strong> anual` : 'con fuerza'}, impulsado por urbanización y vivienda en alquiler. Y América Latina está entre las regiones con mejor impulso.`; }
+          },
+          {
+            cat: 'operativo', catLabel: 'Operativo', titulo: 'El embudo de la verdad',
+            tipo: 'compare',
+            items: () => {
+              const p = M('Conversión de Prospectos (Agente Promedio)'), e = M('Conversión de Prospectos (Agente Élite)');
+              if (!p || !e) return null;
+              return [
+                { label: 'Agente promedio (máx.)', valor: p.Valor_Maximo, color: '#1A1A1A' },
+                { label: 'Agente élite (máx.)', valor: e.Valor_Maximo, color: '#046307' }
+              ];
+            },
+            formato: 'pct',
+            insight: () => { const p = M('Conversión de Prospectos (Agente Promedio)'), e = M('Conversión de Prospectos (Agente Élite)'); return (p && e) ? `Con <strong>los mismos prospectos y el mismo mercado</strong>, el agente élite cierra hasta <strong>${fmt(e.Valor_Maximo / p.Valor_Maximo, 0)} veces más</strong> que el promedio. ¿Su arma? Seguimiento disciplinado y ordenado: la mayoría de agentes abandona un contacto tras 1 o 2 intentos.` : ''; }
+          },
+          {
+            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto cuesta conseguir un interesado?',
+            tipo: 'minmax', mets: ['Costo por Prospecto (Lead)'], labels: ['Costo por prospecto'],
+            insight: () => { const m = M('Costo por Prospecto (Lead)'); return m ? `Cada interesado cuesta entre <strong>US$ ${fmt(m.Valor_Minimo)} y ${fmt(m.Valor_Maximo)}</strong> en publicidad. Con conversiones del 1%, se necesitan ~100 prospectos por cierre. La matemática es brutal: <strong>mejorar la conversión vale más que comprar más prospectos.</strong>` : ''; }
+          },
+          {
+            cat: 'operativo', catLabel: 'Operativo', titulo: 'La regla de los 5 minutos',
+            tipo: 'dona', met: 'Clientes que Eligen al Primero que Responde', labels: ['Eligen al primero que responde', 'Eligen a otro'],
+            insight: () => { const m = M('Clientes que Eligen al Primero que Responde'); return m ? `<strong>${fmt(m.Valor_Maximo)} de cada 100 compradores trabajan con el primer agente que les responde.</strong> Quien contesta en 5 minutos multiplica sus posibilidades frente a quien tarda una hora. La velocidad de respuesta — automatizable — vale más que cualquier campaña.` : ''; }
+          }
+        ]
+      }
     };
 
-    // ---------- Carga principal ----------
+    // =========================================================
+    //   MOTOR DE RENDERIZADO
+    // =========================================================
+
     async function cargarDashboard() {
       document.getElementById('errorBox').classList.remove('visible');
       clearTimeout(timerAviso);
@@ -515,10 +812,12 @@
         clearTimeout(timerAviso);
         document.getElementById('avisoEspera').classList.remove('visible');
 
-        charts.forEach(c => c.destroy());
-        charts = [];
-        fuenteChart();
-        renderizar(datos);
+        datosGlobales = datos;
+        Chart.defaults.font.family = 'Inter';
+        Chart.defaults.color = '#1A1A1A';
+
+        construirSelector();
+        renderizarIndustria(industriaActiva ?? Object.keys(agruparIndustrias())[0]);
 
       } catch (error) {
         console.error("Fallo de conexión con la API:", error);
@@ -530,212 +829,143 @@
       }
     }
 
-    // ---------- Renderizado completo ----------
-    function renderizar(datos) {
-      // Métricas de la hoja
-      const mercado   = buscar(datos, 'Tamaño del Mercado');
-      const cagr      = buscar(datos, 'Crecimiento (CAGR)');
-      const cocinas   = buscar(datos, 'Cocinas');
-      const granito   = buscar(datos, 'Granito (Cuota)');
-      const ingreso   = buscar(datos, 'Ingreso Anual Promedio');
-      const margen    = buscar(datos, 'Margen Bruto');
-      const capex     = buscar(datos, 'Inversión Inicial (CapEx)');
-      const utilizac  = buscar(datos, 'Utilización de Maquinaria (Equilibrio)');
-      const overhead  = buscar(datos, 'Overhead por SqFt');
+    function agruparIndustrias() {
+      const grupos = {};
+      datosGlobales.forEach(d => {
+        const ind = d['Industria'] ?? 'Piedra y Superficies';
+        grupos[ind] = true;
+      });
+      return grupos;
+    }
 
-      // Cálculos para insights (con datos reales)
-      const gananciaMax = ingreso && margen ? ingreso.Valor_Maximo * (margen.Valor_Maximo / 100) : null;
-      const paybackMeses = gananciaMax && capex ? Math.ceil((capex.Valor_Maximo / gananciaMax) * 12) : null;
-      const otrosMateriales = granito ? (100 - granito.Valor_Maximo) : null;
-      const otrosUsos = cocinas ? (100 - cocinas.Valor_Maximo) : null;
+    function construirSelector() {
+      const cont = document.getElementById('selectorIndustria');
+      cont.innerHTML = '';
+      Object.keys(agruparIndustrias()).forEach(ind => {
+        const cfg = CONFIG[ind];
+        const btn = document.createElement('button');
+        btn.className = 'ind-chip';
+        btn.innerHTML = `<span class="emoji">${cfg?.emoji ?? '📊'}</span>${ind}`;
+        btn.addEventListener('click', () => renderizarIndustria(ind));
+        btn.dataset.ind = ind;
+        cont.appendChild(btn);
+      });
+    }
 
+    function renderizarIndustria(industria) {
+      industriaActiva = industria;
+      document.querySelectorAll('.ind-chip').forEach(b =>
+        b.classList.toggle('activo', b.dataset.ind === industria));
+      document.getElementById('tituloIndustria').textContent = industria;
+
+      charts.forEach(c => c.destroy());
+      charts = [];
+
+      const cfg = CONFIG[industria];
       const c = document.getElementById('contenido');
+
+      if (!cfg) {
+        c.innerHTML = `<div class="error-box visible"><h3>Industria sin configuración</h3><p>Hay datos de "${industria}" en la base, pero el dashboard aún no tiene su capa de análisis. Agréguela en el objeto CONFIG del código.</p></div>`;
+        return;
+      }
+
+      // --- Veredicto + KPIs + Filtros + Paneles ---
+      const categorias = [...new Set(cfg.graficos.map(g => g.cat))];
+      const nombresCat = { financiero: '💰 Dinero', mercado: '🌍 Mercado', operativo: '⚙️ Operación' };
+
       c.innerHTML = `
-        <!-- Veredicto -->
         <div class="veredicto">
-          <h2>Veredicto: mercado atractivo, pero exigente en operación</h2>
-          <p>
-            Es una industria de <strong>US$ ${mercado ? fmt(mercado.Valor_Maximo, 1) : '—'} mil millones</strong> que crece
-            <strong>${cagr ? fmt(cagr.Valor_Maximo, 1) : '—'}% cada año</strong> y deja márgenes de ganancia altos.
-            La barrera es la inversión inicial y la exigencia de mantener las máquinas casi siempre ocupadas —
-            justamente el tipo de problema que se resuelve con buena información y control del negocio.
-          </p>
-          <div class="senales">
-            <span class="senal">✅ Mercado grande y en crecimiento</span>
-            <span class="senal">✅ Márgenes de ganancia altos</span>
-            <span class="senal">✅ Demanda concentrada y clara</span>
-            <span class="senal">⚠️ Inversión inicial elevada</span>
-            <span class="senal">⚠️ Exige eficiencia operativa</span>
-          </div>
+          <h2>${cfg.veredicto.titulo}</h2>
+          <p>${cfg.veredicto.texto()}</p>
+          <div class="senales">${cfg.veredicto.senales.map(s => `<span class="senal">${s}</span>`).join('')}</div>
         </div>
 
-        <!-- KPIs -->
         <div class="grid-kpis">
-          <div class="card">
-            <h3>Tamaño del mercado</h3>
-            <div class="valor"><span id="kpi1"></span><span class="unidad">mil millones USD</span></div>
-            <p class="contexto">Todo lo que se vende al año en el mundo en superficies de piedra.</p>
-          </div>
-          <div class="card">
-            <h3>Crecimiento anual</h3>
-            <div class="valor"><span id="kpi2"></span><span class="unidad">% por año</span></div>
-            <p class="contexto">El mercado crece de forma constante hasta 2033. No es una moda pasajera.</p>
-          </div>
-          <div class="card">
-            <h3>Margen bruto máximo</h3>
-            <div class="valor"><span id="kpi3"></span><span class="unidad">%</span></div>
-            <p class="contexto">De cada $100 vendidos, hasta $${margen ? fmt(margen.Valor_Maximo) : '—'} quedan para cubrir gastos y ganar.</p>
-          </div>
+          ${cfg.kpis.map((k, i) => {
+            const m = M(k.met);
+            return `<div class="card">
+              <h3>${k.label}</h3>
+              <div class="valor"><span id="kpi${i}"></span><span class="unidad">${k.unidad}</span></div>
+              <p class="contexto">${k.ctx}</p>
+            </div>`;
+          }).join('')}
         </div>
 
-        <!-- Filtros -->
         <div class="filtros" id="filtros">
           <button class="chip activo" data-cat="todos">Ver todo</button>
-          <button class="chip" data-cat="financiero">💰 Dinero</button>
-          <button class="chip" data-cat="mercado">🌍 Mercado</button>
-          <button class="chip" data-cat="operativo">⚙️ Operación</button>
+          ${categorias.map(cat => `<button class="chip" data-cat="${cat}">${nombresCat[cat] ?? cat}</button>`).join('')}
         </div>
 
-        <!-- Gráficos -->
         <div class="graficos">
-
-          <div class="panel" data-cat="financiero">
-            <h3>¿Cuánto factura un taller al año?</h3>
-            <p class="cat-tag">Financiero</p>
-            <canvas id="chIngreso"></canvas>
-            <div class="insight">
-              <span class="titulo-insight">💡 ¿Qué significa esto?</span>
-              Un taller pequeño factura unos <strong>US$ ${ingreso ? fmt(ingreso.Valor_Minimo) : '—'}</strong> al año,
-              pero uno bien gestionado llega a <strong>US$ ${ingreso ? fmt(ingreso.Valor_Maximo) : '—'}</strong> —
-              ${ingreso ? fmt(ingreso.Valor_Maximo / ingreso.Valor_Minimo, 1) : '—'} veces más.
-              La diferencia no es suerte: es gestión, tecnología y control de costos.
-            </div>
-          </div>
-
-          <div class="panel" data-cat="financiero">
-            <h3>¿La inversión se recupera?</h3>
-            <p class="cat-tag">Financiero</p>
-            <canvas id="chInversion"></canvas>
-            <div class="insight">
-              <span class="titulo-insight">💡 ¿Qué significa esto?</span>
-              Entrar cuesta unos <strong>US$ ${capex ? fmt(capex.Valor_Maximo) : '—'}</strong> en maquinaria.
-              Un taller de alto rendimiento genera hasta <strong>US$ ${gananciaMax ? fmt(gananciaMax) : '—'}</strong>
-              de ganancia bruta al año, es decir, en el mejor escenario la inversión se recupera en
-              <strong>${paybackMeses ?? '—'} meses</strong>. En un taller promedio toma varios años:
-              el rendimiento define todo.
-            </div>
-          </div>
-
-          <div class="panel" data-cat="mercado">
-            <h3>¿Qué material domina?</h3>
-            <p class="cat-tag">Mercado · Material</p>
-            <canvas id="chMaterial"></canvas>
-            <div class="insight">
-              <span class="titulo-insight">💡 ¿Qué significa esto?</span>
-              El granito es el material líder con <strong>${granito ? fmt(granito.Valor_Maximo, 1) : '—'}%</strong>,
-              pero <strong>${otrosMateriales ? fmt(otrosMateriales, 1) : '—'}% del mercado son otros materiales</strong>
-              (cuarzo, piedra sinterizada, mármol). Quien solo trabaja granito deja dos tercios
-              del mercado sobre la mesa.
-            </div>
-          </div>
-
-          <div class="panel" data-cat="mercado">
-            <h3>¿Dónde se instala la piedra?</h3>
-            <p class="cat-tag">Mercado · Aplicación</p>
-            <canvas id="chAplicacion"></canvas>
-            <div class="insight">
-              <span class="titulo-insight">💡 ¿Qué significa esto?</span>
-              <strong>${cocinas ? fmt(cocinas.Valor_Maximo, 1) : '—'} de cada 100 proyectos son cocinas.</strong>
-              La demanda está clarísima: quien quiera vender en esta industria debe hablar el idioma
-              de remodelación de cocinas — ahí está el cliente.
-            </div>
-          </div>
-
-          <div class="panel" data-cat="operativo">
-            <h3>La zona segura de las máquinas</h3>
-            <p class="cat-tag">Operativo</p>
-            <canvas id="chUtilizacion"></canvas>
-            <div class="insight">
-              <span class="titulo-insight">💡 ¿Qué significa esto?</span>
-              Las máquinas deben estar trabajando al menos el
-              <strong>${utilizac ? fmt(utilizac.Valor_Minimo) : '—'}% del tiempo</strong> solo para no perder dinero
-              (cada metro cuadrado carga US$ ${overhead ? fmt(overhead.Valor_Maximo) : '—'} de gastos fijos).
-              Por debajo de esa línea, el taller pierde plata aunque venda. <strong>Aquí es donde medir
-              y monitorear el negocio deja de ser un lujo y se vuelve supervivencia</strong> — y donde
-              un servicio de inteligencia de negocios tiene su oportunidad.
-            </div>
-          </div>
-
+          ${cfg.graficos.map((g, i) => `
+            <div class="panel" data-cat="${g.cat}" id="panel${i}">
+              <h3>${g.titulo}</h3>
+              <p class="cat-tag">${g.catLabel}</p>
+              <canvas id="ch${i}"></canvas>
+              <div class="insight">
+                <span class="titulo-insight">💡 ¿Qué significa esto?</span>
+                ${g.insight()}
+              </div>
+            </div>`).join('')}
         </div>
       `;
 
       // KPIs animados
-      if (mercado) animarValor(document.getElementById('kpi1'), mercado.Valor_Maximo, 1);
-      if (cagr)    animarValor(document.getElementById('kpi2'), cagr.Valor_Maximo, 1);
-      if (margen)  animarValor(document.getElementById('kpi3'), margen.Valor_Maximo, 0);
+      cfg.kpis.forEach((k, i) => {
+        const m = M(k.met);
+        const el = document.getElementById(`kpi${i}`);
+        if (m && el) animarValor(el, m.Valor_Maximo, k.dec);
+        else if (el) el.textContent = '—';
+      });
 
-      // ----- Gráfico 1: Rango de facturación -----
-      if (ingreso) {
-        charts.push(new Chart(document.getElementById('chIngreso'), {
+      // Gráficos
+      cfg.graficos.forEach((g, i) => {
+        const canvas = document.getElementById(`ch${i}`);
+        const chart = construirGrafico(g, canvas);
+        if (chart) charts.push(chart);
+        else document.getElementById(`panel${i}`)?.classList.add('oculto');
+      });
+
+      activarFiltros();
+    }
+
+    // --- Constructores genéricos de gráficos ---
+    function construirGrafico(g, canvas) {
+      if (g.tipo === 'minmax') {
+        const mets = g.mets.map(n => M(n));
+        if (mets.some(m => !m)) return null;
+        return new Chart(canvas, {
           type: 'bar',
           data: {
-            labels: ['Taller pequeño', 'Taller de alto rendimiento'],
-            datasets: [{
-              data: [ingreso.Valor_Minimo, ingreso.Valor_Maximo],
-              backgroundColor: ['#1A1A1A', '#046307'],
-              hoverBackgroundColor: ['#D4AF37', '#D4AF37'],
-              borderRadius: 6
-            }]
+            labels: g.labels,
+            datasets: [
+              { label: 'Mínimo', data: mets.map(m => m.Valor_Minimo), backgroundColor: '#1A1A1A', borderRadius: 6 },
+              { label: 'Máximo', data: mets.map(m => m.Valor_Maximo), backgroundColor: '#046307', borderRadius: 6, hoverBackgroundColor: '#D4AF37' }
+            ]
           },
           options: {
             responsive: true,
             plugins: {
-              legend: { display: false },
-              tooltip: { ...tooltipBase, callbacks: { label: ctx => ' USD ' + fmt(ctx.parsed.y) } }
+              legend: { position: 'bottom', labels: { usePointStyle: true, font: { size: 12 } } },
+              tooltip: { ...tooltipBase, callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmt(ctx.parsed.y, ctx.parsed.y < 100 ? 1 : 0)}` } }
             },
             scales: {
-              y: { beginAtZero: true, grid: { color: 'rgba(26,26,26,0.06)' }, ticks: { callback: v => 'USD ' + fmt(v) } },
+              y: { beginAtZero: true, grid: { color: 'rgba(26,26,26,0.06)' }, ticks: { callback: v => fmt(v) } },
               x: { grid: { display: false } }
             }
           }
-        }));
+        });
       }
 
-      // ----- Gráfico 2: Inversión vs retorno -----
-      if (capex && ingreso && gananciaMax) {
-        charts.push(new Chart(document.getElementById('chInversion'), {
-          type: 'bar',
-          data: {
-            labels: ['Inversión inicial', 'Facturación máx./año', 'Ganancia bruta máx./año'],
-            datasets: [{
-              data: [capex.Valor_Maximo, ingreso.Valor_Maximo, gananciaMax],
-              backgroundColor: ['#1A1A1A', '#046307', '#D4AF37'],
-              borderRadius: 6
-            }]
-          },
-          options: {
-            indexAxis: 'y',
-            responsive: true,
-            plugins: {
-              legend: { display: false },
-              tooltip: { ...tooltipBase, callbacks: { label: ctx => ' USD ' + fmt(ctx.parsed.x) } }
-            },
-            scales: {
-              x: { beginAtZero: true, grid: { color: 'rgba(26,26,26,0.06)' }, ticks: { callback: v => fmt(v / 1000) + 'k' } },
-              y: { grid: { display: false }, ticks: { font: { size: 11 } } }
-            }
-          }
-        }));
-      }
-
-      // ----- Gráfico 3: Material dominante -----
-      if (granito) {
-        charts.push(new Chart(document.getElementById('chMaterial'), {
+      if (g.tipo === 'dona') {
+        const m = M(g.met);
+        if (!m) return null;
+        return new Chart(canvas, {
           type: 'doughnut',
           data: {
-            labels: ['Granito', 'Otros materiales (cuarzo, sinterizados, mármol)'],
+            labels: g.labels,
             datasets: [{
-              data: [granito.Valor_Maximo, otrosMateriales],
+              data: [m.Valor_Maximo, Math.max(0, 100 - m.Valor_Maximo)],
               backgroundColor: ['#D4AF37', '#1A1A1A'],
               borderColor: '#FDFBF7',
               borderWidth: 3,
@@ -750,53 +980,43 @@
               tooltip: { ...tooltipBase, callbacks: { label: ctx => ` ${ctx.label}: ${fmt(ctx.parsed, 1)}%` } }
             }
           }
-        }));
+        });
       }
 
-      // ----- Gráfico 4: Aplicación (cocinas) -----
-      if (cocinas) {
-        charts.push(new Chart(document.getElementById('chAplicacion'), {
-          type: 'doughnut',
+      if (g.tipo === 'compare') {
+        const items = g.items();
+        if (!items) return null;
+        return new Chart(canvas, {
+          type: 'bar',
           data: {
-            labels: ['Cocinas', 'Otros espacios (baños, pisos, fachadas)'],
-            datasets: [{
-              data: [cocinas.Valor_Maximo, otrosUsos],
-              backgroundColor: ['#046307', '#1A1A1A'],
-              borderColor: '#FDFBF7',
-              borderWidth: 3,
-              hoverOffset: 10
-            }]
+            labels: items.map(it => it.label),
+            datasets: [{ data: items.map(it => it.valor), backgroundColor: items.map(it => it.color), borderRadius: 6 }]
           },
           options: {
+            indexAxis: 'y',
             responsive: true,
-            cutout: '62%',
             plugins: {
-              legend: { position: 'bottom', labels: { padding: 14, usePointStyle: true, font: { size: 12 } } },
-              tooltip: { ...tooltipBase, callbacks: { label: ctx => ` ${ctx.label}: ${fmt(ctx.parsed, 1)}%` } }
+              legend: { display: false },
+              tooltip: { ...tooltipBase, callbacks: { label: ctx => g.formato === 'usd' ? ' USD ' + fmt(ctx.parsed.x) : ' ' + fmt(ctx.parsed.x, 1) + '%' } }
+            },
+            scales: {
+              x: { beginAtZero: true, grid: { color: 'rgba(26,26,26,0.06)' }, ticks: { callback: v => g.formato === 'usd' ? fmt(v / 1000) + 'k' : v + '%' } },
+              y: { grid: { display: false }, ticks: { font: { size: 11 } } }
             }
           }
-        }));
+        });
       }
 
-      // ----- Gráfico 5: Zona segura de utilización -----
-      if (utilizac) {
-        charts.push(new Chart(document.getElementById('chUtilizacion'), {
+      if (g.tipo === 'zona') {
+        const m = M(g.met);
+        if (!m) return null;
+        return new Chart(canvas, {
           type: 'bar',
           data: {
             labels: ['Uso de las máquinas'],
             datasets: [
-              {
-                label: 'Zona de pérdida (0–' + fmt(utilizac.Valor_Minimo) + '%)',
-                data: [utilizac.Valor_Minimo],
-                backgroundColor: 'rgba(179, 38, 30, 0.75)',
-                borderRadius: { topLeft: 6, bottomLeft: 6 }
-              },
-              {
-                label: 'Zona de ganancia (' + fmt(utilizac.Valor_Minimo) + '–' + fmt(utilizac.Valor_Maximo) + '%)',
-                data: [utilizac.Valor_Maximo - utilizac.Valor_Minimo],
-                backgroundColor: '#046307',
-                borderRadius: { topRight: 6, bottomRight: 6 }
-              }
+              { label: `Zona de pérdida (0–${fmt(m.Valor_Minimo)}%)`, data: [m.Valor_Minimo], backgroundColor: 'rgba(179, 38, 30, 0.75)', borderRadius: { topLeft: 6, bottomLeft: 6 } },
+              { label: `Zona de ganancia (${fmt(m.Valor_Minimo)}–${fmt(m.Valor_Maximo)}%)`, data: [m.Valor_Maximo - m.Valor_Minimo], backgroundColor: '#046307', borderRadius: { topRight: 6, bottomRight: 6 } }
             ]
           },
           options: {
@@ -811,15 +1031,15 @@
               y: { stacked: true, grid: { display: false } }
             }
           }
-        }));
+        });
       }
 
-      activarFiltros();
+      return null;
     }
 
-    // ---------- Filtros ----------
+    // --- Filtros por categoría ---
     function activarFiltros() {
-      const chips = document.querySelectorAll('.chip');
+      const chips = document.querySelectorAll('#filtros .chip');
       const paneles = document.querySelectorAll('.panel');
       chips.forEach(chip => {
         chip.addEventListener('click', () => {
@@ -833,7 +1053,7 @@
       });
     }
 
-    // ---------- Animación de conteo ----------
+    // --- Animación de conteo ---
     function animarValor(el, valorFinal, decimales = 0) {
       const duracion = 900;
       const inicio = performance.now();
