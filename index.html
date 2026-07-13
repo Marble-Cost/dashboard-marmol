@@ -14,20 +14,23 @@
   <style>
     :root {
       --blanco-crema: #FDFBF7;
-      --negro: #1A1A1A;
+      --negro: #09090B; /* Shadcn zinc-950 */
       --dorado: #D4AF37;
       --verde-esmeralda: #046307;
       
-      /* Glassmorphism Refinado */
-      --vidrio-fondo: rgba(255, 255, 255, 0.65);
-      --vidrio-desenfoque: blur(24px) saturate(180%);
-      --vidrio-borde: rgba(255, 255, 255, 0.8);
-      --vidrio-reflejo: inset 0 1px 1px rgba(255, 255, 255, 0.9), inset 0 0 20px rgba(255, 255, 255, 0.3);
+      /* Glassmorphism y Shadcn Aesthetics */
+      --vidrio-fondo: rgba(255, 255, 255, 0.7);
+      --vidrio-desenfoque: blur(24px) saturate(150%);
+      --vidrio-borde: rgba(255, 255, 255, 0.9);
+      --vidrio-reflejo: inset 0 1px 1px rgba(255, 255, 255, 1), inset 0 -1px 1px rgba(0,0,0,0.02);
       
-      /* Sombras y Transiciones */
-      --sombra-suave: 0 8px 32px rgba(26, 26, 26, 0.05);
-      --sombra-elevada: 0 16px 48px rgba(4, 99, 7, 0.08);
-      --transicion: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      --sombra-shadcn: 0 1px 3px rgba(0,0,0,0.05), 0 10px 15px -5px rgba(0,0,0,0.03);
+      --sombra-elevada: 0 20px 25px -5px rgba(4, 99, 7, 0.1), 0 8px 10px -6px rgba(4, 99, 7, 0.1);
+      
+      /* Curvas de animación (Framer Motion replica) */
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+      --transicion: 0.4s var(--ease-out-quart);
     }
 
     * { box-sizing: border-box; }
@@ -35,938 +38,562 @@
     body {
       background-color: var(--blanco-crema);
       color: var(--negro);
-      font-family: 'Inter', 'Segoe UI', sans-serif;
+      font-family: 'Inter', sans-serif;
       margin: 0;
-      padding: clamp(16px, 5vw, 48px);
+      padding: clamp(16px, 3vw, 40px);
       min-height: 100vh;
-      position: relative;
       overflow-x: hidden;
     }
 
     /* ===== Luz de Cursor Inmersiva ===== */
     .cursor-glow {
       position: fixed;
-      top: 0; left: 0;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 50%);
+      width: 50vw; height: 50vw;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
       transform: translate(-50%, -50%);
-      transition: opacity 0.4s ease;
+      transition: opacity 0.5s ease;
       opacity: 0;
       mix-blend-mode: multiply;
     }
 
-    /* ===== Layout Centrado y Estructurado ===== */
+    /* ===== Layout Central Optimizado ===== */
     .layout-central {
-      max-width: 1350px;
+      max-width: 1500px; /* Expandido para aprovechar pantallas anchas */
       margin: 0 auto;
       width: 100%;
       display: flex;
       flex-direction: column;
     }
 
-    /* ===== Scrollbar Premium ===== */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    /* ===== Scrollbar Minimalista ===== */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.4); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.7); }
+    ::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.6); }
 
-    /* ===== Fondo Dinámico e Inmersivo ===== */
-    .fondo-animado {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background: var(--blanco-crema);
-      overflow: hidden;
-    }
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.35;
-      animation: flotar 20s infinite ease-in-out alternate;
-    }
+    /* ===== Fondo Dinámico ===== */
+    .fondo-animado { position: fixed; inset: 0; z-index: -1; background: var(--blanco-crema); overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.3; animation: flotar 25s infinite ease-in-out alternate; }
     .orb-1 { width: 45vw; height: 45vw; background: var(--dorado); top: -10%; left: -10%; }
-    .orb-2 { width: 55vw; height: 55vw; background: var(--verde-esmeralda); bottom: -15%; right: -10%; animation-delay: -5s; }
-    .orb-3 { width: 35vw; height: 35vw; background: #F3E5B0; top: 40%; left: 40%; animation-delay: -10s; opacity: 0.4; }
+    .orb-2 { width: 50vw; height: 50vw; background: var(--verde-esmeralda); bottom: -10%; right: -10%; animation-delay: -5s; }
+    @keyframes flotar { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
     
-    @keyframes flotar {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(50px, 80px) scale(1.15); }
-    }
-
     body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--dorado) 0%, #F3E5B0 45%, var(--dorado) 60%, #B8952C 100%);
+      content: ''; position: fixed; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--dorado) 0%, #F3E5B0 50%, var(--verde-esmeralda) 100%);
       z-index: 100;
-      box-shadow: 0 2px 15px rgba(212, 175, 55, 0.4);
     }
 
-    /* ===== Header ===== */
-    .header {
-      padding-bottom: 24px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-      text-align: center;
+    /* ===== Cabecera Flex (Aprovechamiento de espacio) ===== */
+    .header-wrapper {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 20px;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
     }
+    .header-izq { flex: 1; }
+    .header-der { display: flex; align-items: flex-end; }
+    
     .eyebrow {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--dorado);
-      margin: 0 0 12px 0;
-      display: inline-block;
-      padding: 6px 16px;
-      background: rgba(212, 175, 55, 0.1);
-      border-radius: 20px;
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      backdrop-filter: blur(10px);
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--dorado); margin: 0 0 10px 0; display: inline-block;
+      padding: 4px 12px; background: rgba(212, 175, 55, 0.08); border-radius: 12px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
     }
     h1 {
-      font-family: 'Marcellus', serif;
-      margin: 0;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 400;
-      line-height: 1.1;
-      background: linear-gradient(135deg, var(--verde-esmeralda) 0%, #083b0a 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -1px;
+      font-family: 'Marcellus', serif; margin: 0; font-size: clamp(2rem, 4vw, 2.8rem);
+      line-height: 1.1; color: var(--verde-esmeralda); letter-spacing: -0.5px;
     }
-    .header p {
-      font-size: clamp(0.95rem, 2vw, 1.1rem);
-      font-weight: 500;
-      color: rgba(26, 26, 26, 0.7);
-      margin: 12px 0 0 0;
-      max-width: 600px;
+    .header-izq p {
+      font-size: 1.05rem; color: #52525B; margin: 8px 0 0 0; max-width: 500px;
     }
 
-    /* ===== Selector de industria ===== */
+    /* ===== Selector de industria (Botones Shadcn style) ===== */
     .selector-industria {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding: 10px 4px 20px 4px;
-      margin-bottom: 24px;
+      display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px;
       -webkit-overflow-scrolling: touch;
-      justify-content: center;
     }
     .ind-chip {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--vidrio-fondo);
-      -webkit-backdrop-filter: var(--vidrio-desenfoque);
-      backdrop-filter: var(--vidrio-desenfoque);
-      border: 1px solid var(--vidrio-borde);
-      border-radius: 20px;
-      padding: 14px 24px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--negro);
-      cursor: pointer;
-      transition: all var(--transicion);
-      white-space: nowrap;
-      box-shadow: var(--sombra-suave), var(--vidrio-reflejo);
+      flex: 0 0 auto; display: flex; align-items: center; gap: 8px;
+      background: white; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+      padding: 10px 18px; font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500;
+      color: #3F3F46; cursor: pointer; transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     }
-    .ind-chip .emoji { font-size: 1.3rem; }
-    .ind-chip:hover { 
-      transform: translateY(-3px); 
-      border-color: var(--dorado);
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15), var(--vidrio-reflejo);
-    }
-    .ind-chip:active { transform: translateY(1px) scale(0.98); }
+    .ind-chip:hover { background: #F4F4F5; color: var(--negro); transform: translateY(-1px); }
+    .ind-chip:active { transform: scale(0.97); }
     .ind-chip.activo {
-      background: linear-gradient(135deg, rgba(6, 61, 8, 0.95), rgba(4, 99, 7, 0.85));
-      border-color: rgba(243, 229, 176, 0.6);
-      color: white;
-      box-shadow: 0 12px 30px rgba(4, 99, 7, 0.4), inset 0 1px 1px rgba(255,255,255,0.2);
+      background: var(--verde-esmeralda); border-color: var(--verde-esmeralda);
+      color: white; box-shadow: 0 4px 12px rgba(4, 99, 7, 0.2); font-weight: 600;
     }
 
-    /* ===== Contenedor Dinámico (Transiciones al cambiar industria) ===== */
+    @media (min-width: 1024px) {
+      .header-wrapper { flex-direction: row; justify-content: space-between; align-items: flex-end; }
+      .selector-industria { justify-content: flex-end; }
+    }
+
+    /* ===== Animaciones Maestras (Shadcn Blur-Fade) ===== */
+    .anim-blur-fade {
+      opacity: 0; filter: blur(10px); transform: translateY(15px) scale(0.98);
+      animation: blurFadeIn 0.6s var(--ease-out-quart) forwards;
+    }
+    @keyframes blurFadeIn {
+      100% { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
+    }
+    /* Retrasos escalonados */
+    .d-1 { animation-delay: 0.05s; }
+    .d-2 { animation-delay: 0.1s; }
+    .d-3 { animation-delay: 0.15s; }
+    .d-4 { animation-delay: 0.2s; }
+
     .transicion-contenido {
-      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      opacity: 1;
-      transform: translateY(0);
-      width: 100%;
+      transition: opacity 0.3s ease, transform 0.3s var(--ease-out-quart);
+      opacity: 1; transform: translateY(0);
     }
-    .transicion-contenido.oculto {
-      opacity: 0;
-      transform: translateY(15px) scale(0.99);
-      pointer-events: none;
-    }
+    .transicion-contenido.oculto { opacity: 0; transform: translateY(10px); pointer-events: none; }
 
-    /* ===== Elementos que "Respiran" (Scroll Reveal) ===== */
-    .scroll-respiro {
-      opacity: 0;
-      transform: translateY(30px) scale(0.98);
-      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: opacity, transform;
-    }
-    .scroll-respiro.visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    /* ===== Veredicto (Cristal Oscuro) ===== */
-    .veredicto {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, rgba(6, 61, 8, 0.85) 0%, rgba(4, 99, 7, 0.75) 100%);
-      -webkit-backdrop-filter: var(--vidrio-desenfoque);
-      backdrop-filter: var(--vidrio-desenfoque);
-      border: 1px solid rgba(243, 229, 176, 0.4);
-      color: white;
-      border-radius: 24px;
-      padding: clamp(24px, 4vw, 36px);
-      margin-bottom: 32px;
-      box-shadow: 0 16px 40px rgba(4, 99, 7, 0.25), inset 0 1px 1px rgba(255,255,255,0.2);
-    }
-    .veredicto::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 50%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-      transform: skewX(-25deg);
-      animation: reflejo 6s infinite;
-    }
-    @keyframes reflejo { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
-    
-    .veredicto h2 {
-      font-family: 'Marcellus', serif;
-      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
-      margin: 0 0 12px 0;
-      color: #F3E5B0;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-    .veredicto p { margin: 0 0 20px 0; font-size: clamp(0.95rem, 2.2vw, 1.05rem); line-height: 1.6; color: rgba(255,255,255,0.95); }
-    .senales { display: flex; flex-wrap: wrap; gap: 10px; }
-    .senal {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 30px;
-      padding: 8px 18px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      transition: all var(--transicion);
-    }
-    .senal:hover { background: rgba(255,255,255,0.2); border-color: rgba(243, 229, 176, 0.6); transform: translateY(-2px); }
-
-    /* ===== KPIs ===== */
-    .grid-kpis {
+    /* ===== Grid Superior: Veredicto + KPIs ===== */
+    .grid-superior {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: clamp(16px, 3vw, 24px);
+      grid-template-columns: 1fr;
+      gap: 24px;
       margin-bottom: 32px;
+    }
+    @media (min-width: 1024px) {
+      .grid-superior { grid-template-columns: 1.1fr 2fr; }
+    }
+
+    /* Veredicto */
+    .veredicto {
+      background: linear-gradient(135deg, rgba(6, 61, 8, 0.95), rgba(4, 99, 7, 0.85));
+      -webkit-backdrop-filter: var(--vidrio-desenfoque); backdrop-filter: var(--vidrio-desenfoque);
+      border: 1px solid rgba(255, 255, 255, 0.15); color: white; border-radius: 20px;
+      padding: 32px; box-shadow: var(--sombra-elevada), inset 0 1px 1px rgba(255,255,255,0.1);
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .veredicto h2 { font-family: 'Marcellus', serif; font-size: 1.5rem; margin: 0 0 16px 0; color: #F3E5B0; }
+    .veredicto p { margin: 0 0 24px 0; font-size: 1rem; line-height: 1.6; color: #E4E4E7; }
+    .senales { display: flex; flex-wrap: wrap; gap: 8px; }
+    .senal {
+      background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px; padding: 6px 14px; font-size: 0.8rem; font-weight: 500;
+    }
+
+    /* KPIs */
+    .grid-kpis {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;
     }
     .card {
-      background: var(--vidrio-fondo);
-      -webkit-backdrop-filter: var(--vidrio-desenfoque);
-      backdrop-filter: var(--vidrio-desenfoque);
-      border: 1px solid var(--vidrio-borde);
-      border-left: 5px solid var(--dorado);
-      padding: 24px;
-      border-radius: 20px;
-      box-shadow: var(--sombra-suave), var(--vidrio-reflejo);
-      transition: transform var(--transicion), box-shadow var(--transicion), border-color var(--transicion);
-      position: relative;
-      overflow: hidden;
+      background: var(--vidrio-fondo); -webkit-backdrop-filter: var(--vidrio-desenfoque); backdrop-filter: var(--vidrio-desenfoque);
+      border: 1px solid var(--vidrio-borde); padding: 24px; border-radius: 20px;
+      box-shadow: var(--sombra-shadcn), var(--vidrio-reflejo); transition: all var(--transicion);
+      display: flex; flex-direction: column; justify-content: space-between;
     }
-    .card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at top right, rgba(212,175,55,0.1), transparent 60%);
-      opacity: 0;
-      transition: opacity var(--transicion);
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--sombra-elevada), inset 0 1px 2px rgba(255,255,255,1);
-      border-color: rgba(212, 175, 55, 0.5);
-    }
-    .card:hover::after { opacity: 1; }
-    .card h3 {
-      color: var(--verde-esmeralda);
-      margin: 0 0 12px 0;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      position: relative;
-      z-index: 2;
-    }
-    .valor {
-      font-size: clamp(1.8rem, 4vw, 2.4rem);
-      font-weight: 700;
-      color: var(--negro);
-      line-height: 1;
-      position: relative;
-      z-index: 2;
-      letter-spacing: -1px;
-    }
-    .valor .unidad { 
-      font-size: 0.45em; font-weight: 600; color: #777; margin-left: 6px; 
-      text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .card .contexto {
-      margin: 12px 0 0 0;
-      font-size: 0.85rem;
-      color: rgba(26,26,26,0.65);
-      line-height: 1.5;
-      position: relative;
-      z-index: 2;
-    }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--sombra-elevada), var(--vidrio-reflejo); border-color: rgba(212, 175, 55, 0.4); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .card h3 { color: #52525B; margin: 0; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(212, 175, 55, 0.15); display: flex; align-items: center; justify-content: center; color: var(--dorado); font-size: 1.2rem; }
+    .valor { font-size: 2.2rem; font-weight: 700; color: var(--negro); letter-spacing: -1px; line-height: 1; margin-bottom: 8px; }
+    .valor .unidad { font-size: 0.4em; font-weight: 600; color: #71717A; margin-left: 4px; text-transform: uppercase; }
+    .contexto { font-size: 0.85rem; color: #71717A; line-height: 1.5; margin: 0; }
 
-    /* ===== Filtros por categoría ===== */
+    /* ===== Filtros ===== */
     .filtros {
-      position: sticky;
-      top: 16px;
-      z-index: 50;
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 12px;
-      margin-bottom: 24px;
-      background: rgba(253, 251, 247, 0.75);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      backdrop-filter: blur(20px) saturate(180%);
-      border: 1px solid rgba(255,255,255,0.9);
-      border-radius: 100px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,1);
+      display: flex; gap: 8px; overflow-x: auto; padding: 4px; margin-bottom: 24px;
       -webkit-overflow-scrolling: touch;
-      justify-content: center;
     }
     .chip {
-      flex: 0 0 auto;
-      background: rgba(255, 255, 255, 0.6);
-      border: 1px solid rgba(26,26,26,0.1);
-      border-radius: 100px;
-      padding: 10px 22px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--negro);
-      cursor: pointer;
-      transition: all var(--transicion);
+      flex: 0 0 auto; background: white; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px;
+      padding: 8px 16px; font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
+      color: #52525B; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     }
-    .chip:hover { border-color: var(--dorado); background: rgba(255,255,255,0.9); transform: translateY(-2px); }
-    .chip:active { transform: scale(0.95); }
-    .chip.activo { background: var(--verde-esmeralda); border-color: var(--verde-esmeralda); color: white; box-shadow: 0 6px 15px rgba(4, 99, 7, 0.3); }
+    .chip:hover { background: #F4F4F5; color: var(--negro); }
+    .chip.activo { background: var(--negro); border-color: var(--negro); color: white; font-weight: 600; }
 
-    /* ===== Paneles de Gráficos ===== */
+    /* ===== Gráficos ===== */
     .graficos {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
-      gap: clamp(20px, 4vw, 32px);
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 24px;
     }
     .panel {
-      position: relative;
-      background: var(--vidrio-fondo);
-      -webkit-backdrop-filter: var(--vidrio-desenfoque);
-      backdrop-filter: var(--vidrio-desenfoque);
-      border: 1px solid var(--vidrio-borde);
-      border-top: 5px solid var(--verde-esmeralda);
-      padding: clamp(20px, 4vw, 32px);
-      border-radius: 24px;
-      box-shadow: var(--sombra-suave), var(--vidrio-reflejo);
-      transition: transform var(--transicion), box-shadow var(--transicion);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      background: var(--vidrio-fondo); -webkit-backdrop-filter: var(--vidrio-desenfoque); backdrop-filter: var(--vidrio-desenfoque);
+      border: 1px solid var(--vidrio-borde); padding: 24px; border-radius: 20px;
+      box-shadow: var(--sombra-shadcn), var(--vidrio-reflejo); transition: all var(--transicion);
+      display: flex; flex-direction: column;
     }
-    .panel::before {
-      content: '';
-      position: absolute;
-      top: -50px; right: -50px;
-      width: 150px; height: 150px;
-      background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
-      pointer-events: none;
-    }
-    .panel:hover { transform: translateY(-6px); box-shadow: var(--sombra-elevada), inset 0 1px 2px rgba(255,255,255,1); }
+    .panel:hover { box-shadow: var(--sombra-elevada), var(--vidrio-reflejo); }
     .panel.oculto { display: none; }
     
-    .panel h3 { font-family: 'Marcellus', serif; font-weight: 400; font-size: 1.25rem; margin: 0 0 6px 0; color: var(--negro); }
-    .panel .cat-tag { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dorado); margin: 0 0 24px 0; }
-    .panel canvas { max-height: 280px; width: 100% !important; margin-bottom: 20px;}
+    .panel-header { margin-bottom: 20px; }
+    .panel h3 { font-family: 'Marcellus', serif; font-size: 1.3rem; margin: 0 0 4px 0; color: var(--negro); }
+    .cat-tag { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--verde-esmeralda); margin: 0; }
+    .panel canvas { max-height: 280px; width: 100% !important; margin-bottom: 24px; margin-top: auto;}
 
     .insight {
+      background: #F4F4F5; border: 1px solid #E4E4E7; border-left: 3px solid var(--dorado);
+      border-radius: 12px; padding: 16px; font-size: 0.9rem; line-height: 1.6; color: #3F3F46;
       margin-top: auto;
-      background: rgba(212, 175, 55, 0.05);
-      border: 1px solid rgba(212, 175, 55, 0.25);
-      border-left: 4px solid var(--dorado);
-      border-radius: 12px;
-      padding: 18px 22px;
-      font-size: 0.92rem;
-      line-height: 1.6;
-      color: rgba(26,26,26,0.85);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
     }
-    .insight strong { color: var(--verde-esmeralda); font-weight: 700;}
-    .insight .titulo-insight {
-      display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--dorado); margin-bottom: 8px;
-    }
+    .insight strong { color: var(--negro); font-weight: 600; }
 
-    .fuente {
-      margin-top: 40px; font-size: 0.8rem; font-weight: 500; color: rgba(26,26,26,0.5);
-      text-align: center; padding: 20px; border-top: 1px solid rgba(212, 175, 55, 0.2);
-    }
-
-    /* ===== Estados y Esqueletos ===== */
+    /* ===== Esqueletos (Shadcn UI Style) ===== */
     .skeleton {
-      background: rgba(255, 255, 255, 0.5);
-      -webkit-backdrop-filter: blur(10px);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--vidrio-borde);
+      background: rgba(0,0,0,0.05);
       border-radius: 20px;
-      min-height: 120px;
       position: relative;
       overflow: hidden;
     }
     .skeleton::after {
       content: ''; position: absolute; inset: 0; transform: translateX(-100%);
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-      animation: brillo 1.5s infinite;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      animation: shadcn-shimmer 2s infinite;
     }
-    
-    .aviso-espera { display: none; margin: 0 0 24px 0; padding: 16px 20px; background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 16px; font-size: 0.95rem; font-weight: 500; text-align: center;}
-    .aviso-espera.visible { display: block; }
-    
-    .error-box { display: none; background: rgba(255, 255, 255, 0.8); border: 1px solid var(--vidrio-borde); border-left: 5px solid #B3261E; border-radius: 16px; padding: 24px; margin-bottom: 24px; text-align: center;}
+    @keyframes shadcn-shimmer { 100% { transform: translateX(100%); } }
+
+    .aviso-espera {
+      display: none; padding: 16px; background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 12px; font-size: 0.9rem; font-weight: 500; text-align: center; margin-bottom: 24px;
+    }
+    .aviso-espera.visible { display: block; animation: blurFadeIn 0.4s ease forwards; }
+
+    .error-box { display: none; background: white; border: 1px solid #E4E4E7; border-left: 4px solid #EF4444; border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: var(--sombra-shadcn); }
     .error-box.visible { display: block; }
-    .error-box h3 { margin: 0 0 10px 0; color: #B3261E; font-size: 1.1rem; }
-    .error-box p { margin: 0 0 20px 0; font-size: 0.95rem; }
+    .error-box h3 { margin: 0 0 8px 0; color: #EF4444; font-size: 1rem; }
     
-    .btn-reintentar { background: var(--verde-esmeralda); color: white; border: none; padding: 12px 28px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all var(--transicion); }
-    .btn-reintentar:hover { background: #05780A; transform: translateY(-2px); }
-
-    @keyframes brillo { to { transform: translateX(100%); } }
-
     @media (max-width: 768px) {
-      .orb-1 { width: 70vw; height: 70vw; }
-      .orb-2 { width: 80vw; height: 80vw; }
-      .veredicto::before { display: none; }
-      .filtros, .selector-industria { justify-content: flex-start; }
+      .header-wrapper { text-align: center; align-items: center; }
+      .selector-industria { justify-content: center; }
     }
     @media (max-width: 520px) {
-      .grid-kpis, .graficos { grid-template-columns: 1fr; }
-      .panel canvas { max-height: 240px; }
-      .filtros { top: 8px; }
-      .cursor-glow { display: none; } /* Ocultar luz en pantallas táctiles */
+      .filtros { justify-content: flex-start; }
+      .cursor-glow { display: none; }
+      .veredicto { padding: 24px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Luz de seguimiento al cursor -->
   <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="fondo-animado"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
 
-  <!-- Elementos de profundidad del Glassmorphism -->
-  <div class="fondo-animado">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
-
-  <!-- Contenedor Central para Simetría Perfecta -->
   <main class="layout-central">
     
-    <div class="header">
-      <span class="eyebrow">Business Intelligence · Observatorio de Mercados</span>
-      <h1 id="tituloIndustria">Benchmarks de Industrias</h1>
-      <p>¿Vale la pena entrar a este mercado? Los números, explicados en simple.</p>
+    <div class="header-wrapper">
+      <div class="header-izq anim-blur-fade">
+        <span class="eyebrow">Business Intelligence</span>
+        <h1 id="tituloIndustria">Benchmarks de Industrias</h1>
+        <p>Análisis de rentabilidad y viabilidad operativa.</p>
+      </div>
+      <div class="header-der anim-blur-fade d-1">
+        <nav class="selector-industria" id="selectorIndustria"></nav>
+      </div>
     </div>
 
-    <nav class="selector-industria" id="selectorIndustria"></nav>
-
-    <div class="aviso-espera" id="avisoEspera">
-      ⏳ Conectando al motor de datos... (puede tardar unos segundos en el primer arranque)
-    </div>
-
+    <div class="aviso-espera" id="avisoEspera">⏳ Conectando al motor de datos... (puede tardar unos segundos)</div>
     <div class="error-box" id="errorBox">
       <h3>Error de conexión</h3>
       <p id="errorDetalle"></p>
-      <button class="btn-reintentar" onclick="cargarDashboard()">Reintentar conexión</button>
+      <button class="chip activo" onclick="cargarDashboard()">Reintentar</button>
     </div>
 
-    <!-- Contenedor con transición de opacidad -->
     <div id="contenido" class="transicion-contenido">
-      <div class="skeleton" style="height:140px; margin-bottom:32px;"></div>
-      <div class="grid-kpis">
-        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      <!-- Loading Skeleton Layout -->
+      <div class="grid-superior">
+        <div class="skeleton" style="height: 300px;"></div>
+        <div class="grid-kpis">
+          <div class="skeleton" style="height: 160px;"></div><div class="skeleton"></div><div class="skeleton"></div>
+        </div>
       </div>
       <div class="graficos">
-        <div class="skeleton" style="min-height:350px;"></div>
-        <div class="skeleton" style="min-height:350px;"></div>
+        <div class="skeleton" style="height: 400px;"></div><div class="skeleton"></div>
       </div>
     </div>
-
-    <p class="fuente">Fuente: Base de Datos Maestros 2025 · Actualización en tiempo real vía API</p>
 
   </main>
 
   <script>
-    // Enlace de backend en Render ejecutando Python
     const URL_BACKEND = "https://dashboard-marmol.onrender.com/api/benchmarks";
+    let timerAviso = null, charts = [], datosGlobales = [], industriaActiva = null;
 
-    let timerAviso = null;
-    let charts = [];
-    let datosGlobales = [];
-    let industriaActiva = null;
-
-    // --- Efecto Cursor Inmersivo ---
+    // --- Cursor Inmersivo ---
     const cursor = document.getElementById('cursorGlow');
     document.addEventListener('mousemove', (e) => {
-      cursor.style.opacity = '1';
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
+      cursor.style.opacity = '1'; cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
     });
     document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
 
-    // --- Motor de Respiración en Scroll (Intersection Observer) ---
-    function iniciarRespiracionScroll() {
-      const observer = new IntersectionObserver((entradas) => {
-        entradas.forEach(entrada => {
-          if (entrada.isIntersecting) {
-            entrada.target.classList.add('visible');
-          }
-        });
-      }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-
-      document.querySelectorAll('.scroll-respiro').forEach(el => observer.observe(el));
-    }
-
-    // ---------- Utilidades ----------
-    const fmt = (n, dec = 0) => Number(n).toLocaleString('es-CO', {
-      minimumFractionDigits: dec, maximumFractionDigits: dec
-    });
-
-    const M = (nombre) => datosGlobales.find(d =>
-      (d['Industria'] ?? 'Piedra y Superficies') === industriaActiva && d['Métrica'] === nombre
-    ) ?? null;
-
-    const tooltipBase = { backgroundColor: 'rgba(26, 26, 26, 0.9)', padding: 14, cornerRadius: 10, titleFont: {family: 'Inter', size: 14}, bodyFont: {family: 'Inter', size: 13} };
+    // --- Utilidades ---
+    const fmt = (n, dec = 0) => Number(n).toLocaleString('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    const M = (nombre) => datosGlobales.find(d => (d['Industria'] ?? 'Piedra y Superficies') === industriaActiva && d['Métrica'] === nombre) ?? null;
+    const tooltipBase = { backgroundColor: '#09090B', padding: 12, cornerRadius: 8, titleFont: {family: 'Inter', size: 13, weight: '600'}, bodyFont: {family: 'Inter', size: 13} };
 
     // =========================================================
-    //   CONFIGURACIÓN POR INDUSTRIA
+    //   CONFIGURACIÓN EDITORIAL
     // =========================================================
     const CONFIG = {
-
       'Piedra y Superficies': {
         emoji: '🪨',
         veredicto: {
-          titulo: 'Veredicto: mercado atractivo, pero exigente en operación',
-          texto: () => `Es una industria de <strong>US$ ${M('Tamaño del Mercado') ? fmt(M('Tamaño del Mercado').Valor_Maximo, 1) : '—'} mil millones</strong> que crece <strong>${M('Crecimiento (CAGR)') ? fmt(M('Crecimiento (CAGR)').Valor_Maximo, 1) : '—'}% al año</strong> y deja márgenes altos. La barrera es la inversión inicial y la exigencia de mantener las máquinas casi siempre ocupadas — el tipo de problema que se resuelve con buena información y control del negocio.`,
-          senales: ['✅ Mercado grande y en crecimiento', '✅ Márgenes de ganancia altos', '✅ Demanda concentrada y clara', '⚠️ Inversión inicial elevada', '⚠️ Exige eficiencia operativa']
+          titulo: 'Atractivo, pero exigente',
+          texto: () => `Mercado de <strong>US$ ${M('Tamaño del Mercado') ? fmt(M('Tamaño del Mercado').Valor_Maximo, 1) : '—'}B</strong> que crece <strong>${M('Crecimiento (CAGR)') ? fmt(M('Crecimiento (CAGR)').Valor_Maximo, 1) : '—'}% al año</strong>. Altamente lucrativo, pero la barrera de inversión inicial y la eficiencia operativa son implacables.`,
+          senales: ['✅ Alta demanda', '✅ Márgenes brutos fuertes', '⚠️ CapEx elevado', '⚠️ Dependencia del CNC']
         },
         kpis: [
-          { met: 'Tamaño del Mercado', label: 'Tamaño del mercado', unidad: 'mil millones USD', dec: 1, ctx: 'Ventas anuales mundiales de superficies de piedra.' },
-          { met: 'Crecimiento (CAGR)', label: 'Crecimiento anual', unidad: '% por año', dec: 1, ctx: 'Crece de forma constante hasta 2033. No es una moda.' },
-          { met: 'Margen Bruto', label: 'Margen bruto máximo', unidad: '%', dec: 0, ctx: 'Lo que queda de cada venta para cubrir gastos y ganar.' }
+          { met: 'Tamaño del Mercado', label: 'Mercado Total', unidad: 'Billones USD', dec: 1, ctx: 'Ventas mundiales anuales.' },
+          { met: 'Margen Bruto', label: 'Margen Bruto', unidad: '% Max', dec: 0, ctx: 'Ganancia antes de impuestos.' },
+          { met: 'Overhead por SqFt', label: 'Overhead', unidad: 'USD/SqFt', dec: 0, ctx: 'Costo fijo por pie cuadrado.' }
         ],
         graficos: [
           {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto factura un taller al año?',
-            tipo: 'minmax', mets: ['Ingreso Anual Promedio'], labels: ['Facturación anual'],
-            insight: () => { const m = M('Ingreso Anual Promedio'); return m ? `Un taller pequeño factura unos <strong>US$ ${fmt(m.Valor_Minimo)}</strong> al año, pero uno bien gestionado llega a <strong>US$ ${fmt(m.Valor_Maximo)}</strong> — ${fmt(m.Valor_Maximo / m.Valor_Minimo, 1)} veces más. La diferencia no es suerte: es gestión, tecnología y control de costos.` : ''; }
+            cat: 'financiero', catLabel: 'Métricas Financieras', titulo: 'Rendimiento de Facturación',
+            tipo: 'minmax', mets: ['Ingreso Anual Promedio'], labels: ['Facturación (USD)'],
+            insight: () => { const m = M('Ingreso Anual Promedio'); return m ? `Un taller promedio factura entre <strong>US$ ${fmt(m.Valor_Minimo)}</strong> y <strong>US$ ${fmt(m.Valor_Maximo)}</strong> al año. La gestión de datos define el límite.` : ''; }
           },
           {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿La inversión se recupera?',
-            tipo: 'compare',
-            items: () => {
-              const capex = M('Inversión Inicial (CapEx)'), ing = M('Ingreso Anual Promedio'), mar = M('Margen Bruto');
-              if (!capex || !ing || !mar) return null;
-              return [
-                { label: 'Inversión inicial', valor: capex.Valor_Maximo, color: '#1A1A1A' },
-                { label: 'Facturación máx./año', valor: ing.Valor_Maximo, color: '#046307' },
-                { label: 'Ganancia bruta máx./año', valor: ing.Valor_Maximo * mar.Valor_Maximo / 100, color: '#D4AF37' }
-              ];
-            },
-            formato: 'usd',
-            insight: () => {
-              const capex = M('Inversión Inicial (CapEx)'), ing = M('Ingreso Anual Promedio'), mar = M('Margen Bruto');
-              if (!capex || !ing || !mar) return '';
-              const gan = ing.Valor_Maximo * mar.Valor_Maximo / 100;
-              return `Entrar cuesta unos <strong>US$ ${fmt(capex.Valor_Maximo)}</strong> en maquinaria. Un taller de alto rendimiento genera hasta <strong>US$ ${fmt(gan)}</strong> de ganancia bruta al año: en el mejor escenario la inversión se recupera en <strong>${Math.ceil(capex.Valor_Maximo / gan * 12)} meses</strong>. En un taller promedio toma varios años — el rendimiento define todo.`;
-            }
+            cat: 'mercado', catLabel: 'Distribución de Mercado', titulo: 'Dominancia de Materiales',
+            tipo: 'dona', met: 'Granito (Cuota)', labels: ['Granito', 'Cuarzo / Sinterizados'],
+            insight: () => { const m = M('Granito (Cuota)'); return m ? `El granito captura el <strong>${fmt(m.Valor_Maximo, 1)}%</strong>. El resto está siendo devorado por superficies tecnológicas.` : ''; }
           },
           {
-            cat: 'mercado', catLabel: 'Mercado · Material', titulo: '¿Qué material domina?',
-            tipo: 'dona', met: 'Granito (Cuota)', labels: ['Granito', 'Otros materiales (cuarzo, sinterizados, mármol)'],
-            insight: () => { const m = M('Granito (Cuota)'); return m ? `El granito lidera con <strong>${fmt(m.Valor_Maximo, 1)}%</strong>, pero <strong>${fmt(100 - m.Valor_Maximo, 1)}% del mercado son otros materiales</strong>. Quien solo trabaja granito deja dos tercios del mercado sobre la mesa.` : ''; }
-          },
-          {
-            cat: 'mercado', catLabel: 'Mercado · Aplicación', titulo: '¿Dónde se instala la piedra?',
-            tipo: 'dona', met: 'Cocinas', labels: ['Cocinas', 'Otros espacios (baños, pisos, fachadas)'],
-            insight: () => { const m = M('Cocinas'); return m ? `<strong>${fmt(m.Valor_Maximo, 1)} de cada 100 proyectos son cocinas.</strong> La demanda está clarísima: hay que hablar el idioma de la remodelación de cocinas — ahí está el cliente.` : ''; }
-          },
-          {
-            cat: 'operativo', catLabel: 'Operativo', titulo: 'La zona segura de las máquinas',
+            cat: 'operativo', catLabel: 'Control Operativo', titulo: 'Punto Crítico de Maquinaria',
             tipo: 'zona', met: 'Utilización de Maquinaria (Equilibrio)',
-            insight: () => {
-              const u = M('Utilización de Maquinaria (Equilibrio)'), o = M('Overhead por SqFt');
-              return u ? `Las máquinas deben trabajar al menos el <strong>${fmt(u.Valor_Minimo)}% del tiempo</strong> solo para no perder dinero${o ? ` (cada pie cuadrado carga US$ ${fmt(o.Valor_Maximo)} de gastos fijos)` : ''}. Por debajo de esa línea, el taller pierde plata aunque venda. <strong>Aquí medir el negocio deja de ser un lujo y se vuelve supervivencia.</strong>` : '';
-            }
+            insight: () => { const u = M('Utilización de Maquinaria (Equilibrio)'); return u ? `El CNC debe operar al <strong>${fmt(u.Valor_Minimo)}%</strong> solo para cubrir costos. Tiempos muertos equivalen a pérdidas líquidas.` : ''; }
           }
         ]
       },
-
       'Gastronomía': {
         emoji: '🍔',
         veredicto: {
-          titulo: 'Veredicto: mercado enorme, márgenes de milímetros',
-          texto: () => `El negocio de la comida mueve alrededor de <strong>US$ 1 billón al año solo en EEUU</strong>, pero es la industria de los márgenes delgados: de cada $100 vendidos quedan entre $3 y $9 de ganancia. Aquí no gana el que más vende — <strong>gana el que mejor controla sus costos</strong>, y eso solo se logra midiendo cada semana.`,
-          senales: ['✅ Demanda constante y universal', '✅ Barrera de entrada baja', '⚠️ Márgenes muy delgados (3–9%)', '⚠️ Solo 42% fueron rentables en 2024', '💡 El control de costos lo es todo']
+          titulo: 'Márgenes de milímetros',
+          texto: () => `Mueve <strong>US$ 1 billón</strong> en EEUU, pero de cada $100 vendidos, quedan entre $3 y $9 de ganancia. Gana el que mejor controla sus costos, no el que más vende.`,
+          senales: ['✅ Demanda perpetua', '⚠️ Márgenes netos <10%', '⚠️ Alta mortandad', '💡 Costo Primo crítico']
         },
         kpis: [
-          { met: 'Tamaño del Mercado (Restaurantes EEUU)', label: 'Mercado restaurantes (EEUU)', unidad: 'mil millones USD', dec: 0, ctx: 'El sector restaurantes de EEUU como referencia global.' },
-          { met: 'Margen Neto Comida Rápida', label: 'Margen neto comida rápida', unidad: '% máximo', dec: 0, ctx: 'La comida rápida es el formato más rentable del sector.' },
-          { met: 'Restaurantes Rentables (EEUU)', label: 'Restaurantes rentables', unidad: '% en 2024', dec: 0, ctx: 'Menos de la mitad ganó dinero el año pasado.' }
+          { met: 'Restaurantes Rentables (EEUU)', label: 'Rentabilidad', unidad: '% Negocios', dec: 0, ctx: 'Solo el 42% sobrevivió en verde.' },
+          { met: 'Margen Neto Comida Rápida', label: 'Fast Food', unidad: '% Margen Neto', dec: 0, ctx: 'El formato más rentable del sector.' },
+          { met: 'Margen Neto Restaurante Servicio Completo', label: 'Full Service', unidad: '% Margen Neto', dec: 0, ctx: 'Altos costos operativos hunden el margen.' }
         ],
         graficos: [
           {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto queda de ganancia según el formato?',
-            tipo: 'minmax', mets: ['Margen Neto Comida Rápida', 'Margen Neto Restaurante Servicio Completo'], labels: ['Comida rápida', 'Restaurante de mesa'],
-            insight: () => `La comida rápida gana más (<strong>6–9%</strong>) que el restaurante de mesa (<strong>3–8%</strong>) porque estandariza todo: menú corto, procesos repetibles, menos personal por venta. El formato del negocio decide el margen antes que la sazón.`
+            cat: 'financiero', catLabel: 'Estructura de Costos', titulo: 'Límites del Costo Primo',
+            tipo: 'compare', items: () => { const a = M('Costo de Alimentos'), l = M('Costo Laboral'), p = M('Costo Primo (Alimentos + Personal)'); if(!a||!l||!p) return null; return [{label:'Alimentos', valor:a.Valor_Maximo, color:'#1A1A1A'}, {label:'Personal', valor:l.Valor_Maximo, color:'#D4AF37'}, {label:'Costo Primo Máx', valor:p.Valor_Maximo, color:'#046307'}]; }, formato: 'pct',
+            insight: () => `Ingredientes + personal no deben superar el <strong>65%</strong> de la venta. Más allá, se trabaja a pérdida.`
           },
           {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿A dónde se va cada $100 de venta?',
-            tipo: 'compare',
-            items: () => {
-              const a = M('Costo de Alimentos'), l = M('Costo Laboral'), p = M('Costo Primo (Alimentos + Personal)');
-              if (!a || !l || !p) return null;
-              return [
-                { label: 'Ingredientes (máx.)', valor: a.Valor_Maximo, color: '#1A1A1A' },
-                { label: 'Personal (máx.)', valor: l.Valor_Maximo, color: '#D4AF37' },
-                { label: 'Ingredientes + Personal (tope sano)', valor: p.Valor_Maximo, color: '#046307' }
-              ];
-            },
-            formato: 'pct',
-            insight: () => `Ingredientes y personal juntos (el "costo primo") no deben pasar del <strong>65% de las ventas</strong> — arriba de eso, el negocio trabaja para sus proveedores. Los locales rentables miden este número <strong>cada semana</strong>, no cada mes.`
-          },
-          {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto factura un local de comida rápida?',
-            tipo: 'minmax', mets: ['Facturación Anual Comida Rápida'], labels: ['Facturación anual'],
-            insight: () => { const m = M('Facturación Anual Comida Rápida'); return m ? `Entre <strong>US$ ${fmt(m.Valor_Minimo)}</strong> y <strong>US$ ${fmt(m.Valor_Maximo)}</strong> al año — una brecha de ${fmt(m.Valor_Maximo / m.Valor_Minimo, 0)} veces entre el local promedio y el de alto rendimiento. Ubicación, operación y datos hacen la diferencia.` : ''; }
-          },
-          {
-            cat: 'operativo', catLabel: 'Operativo', titulo: '¿Cuántos sobreviven?',
-            tipo: 'dona', met: 'Restaurantes Rentables (EEUU)', labels: ['Rentables', 'No rentables o en pérdida'],
-            insight: () => { const m = M('Restaurantes Rentables (EEUU)'); return m ? `Solo <strong>${fmt(m.Valor_Maximo)} de cada 100 restaurantes fueron rentables en 2024</strong>. Con márgenes de un dígito, un 2% de descuido en costos borra la ganancia del mes. <strong>Medir a tiempo es la diferencia entre estar en el 42% o en el 58%.</strong>` : ''; }
+            cat: 'operativo', catLabel: 'Estado del Mercado', titulo: 'Tasa de Sobrevivencia',
+            tipo: 'dona', met: 'Restaurantes Rentables (EEUU)', labels: ['Rentables', 'En pérdida'],
+            insight: () => `El <strong>58%</strong> de los restaurantes operó en pérdida en 2024. El control de inventario es la única defensa.`
           }
         ]
       },
-
       'Hotelería': {
         emoji: '🏨',
         veredicto: {
-          titulo: 'Veredicto: industria gigante que vive de dos números',
-          texto: () => `La hospitalidad mueve <strong>US$ 4.9 billones al año en el mundo</strong> y todo hotel vive de dos números: cuántas noches vende (ocupación) y a qué precio (tarifa). El enemigo silencioso son los intermediarios, que cobran hasta <strong>25% de comisión por reserva</strong>. Quien controla sus datos y su canal directo, controla su margen.`,
-          senales: ['✅ Mercado masivo y global', '✅ Turismo en Colombia en alza', '⚠️ 1 de cada 3 noches queda vacía', '⚠️ Intermediarios cobran 15–25%', '💡 Precios dinámicos = ventaja directa']
+          titulo: 'El negocio de la demanda',
+          texto: () => `Mercado de <strong>US$ 4.9 billones</strong> donde la habitación vacía es pérdida pura. La clave está en la venta directa para evadir el peaje de los intermediarios.`,
+          senales: ['✅ Turismo al alza', '⚠️ 36% capacidad ociosa', '⚠️ Peaje OTAs (25%)', '💡 Venta directa es ley']
         },
         kpis: [
-          { met: 'Tamaño del Mercado (Hospitalidad)', label: 'Mercado global', unidad: 'mil millones USD', dec: 0, ctx: 'Todo lo que mueve la hospitalidad mundial al año.' },
-          { met: 'Ocupación Promedio (EEUU)', label: 'Ocupación promedio', unidad: '%', dec: 1, ctx: 'De cada 100 noches disponibles, cuántas se venden.' },
-          { met: 'Margen Operativo Bruto (GOP)', label: 'Margen operativo', unidad: '%', dec: 1, ctx: 'Lo que queda tras pagar la operación del hotel.' }
+          { met: 'Ocupación Promedio (EEUU)', label: 'Ocupación', unidad: '% Promedio', dec: 1, ctx: 'Habitaciones ocupadas por noche.' },
+          { met: 'Tarifa Diaria Promedio (ADR)', label: 'ADR', unidad: 'USD/Noche', dec: 0, ctx: 'Tarifa promedio de venta.' },
+          { met: 'Margen Operativo Bruto (GOP)', label: 'Margen GOP', unidad: '%', dec: 1, ctx: 'Ganancia tras operación directa.' }
         ],
         graficos: [
           {
-            cat: 'operativo', catLabel: 'Operativo', titulo: 'El termómetro del hotel: la ocupación',
-            tipo: 'dona', met: 'Ocupación Promedio (EEUU)', labels: ['Noches vendidas', 'Noches vacías'],
-            insight: () => { const m = M('Ocupación Promedio (EEUU)'); return m ? `En promedio, <strong>${fmt(100 - m.Valor_Maximo, 1)} de cada 100 noches la habitación duerme vacía</strong> — y una noche no vendida no se recupera jamás, a diferencia de un producto en bodega. Por eso los hoteles que ajustan precios según la demanda le ganan a los de tarifa fija.` : ''; }
+            cat: 'operativo', catLabel: 'Intermediación', titulo: 'Costo de Adquisición',
+            tipo: 'compare', items: () => { const o = M('Comisión de Intermediarios (OTAs)'), d = M('Costo de Venta Directa (Web Propia)'); if(!o||!d) return null; return [{label:'OTA (Booking)', valor:o.Valor_Maximo, color:'#1A1A1A'}, {label:'Web Directa', valor:d.Valor_Maximo, color:'#046307'}]; }, formato: 'pct',
+            insight: () => `Booking y Expedia devoran hasta el <strong>25%</strong> del ingreso. Posicionamiento propio equivale a margen neto.`
           },
           {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto cobra un hotel por noche?',
-            tipo: 'minmax', mets: ['Tarifa Diaria Promedio (ADR)'], labels: ['Tarifa por noche'],
-            insight: () => { const m = M('Tarifa Diaria Promedio (ADR)'); return m ? `Desde <strong>US$ ${fmt(m.Valor_Minimo)}</strong> en hoteles económicos hasta <strong>US$ ${fmt(m.Valor_Maximo)}+</strong> en lujo. Desde 2023, el crecimiento del sector viene de subir tarifa, no de llenar más — el que sabe <strong>cuánto cobrar cada día</strong> gana la partida.` : ''; }
-          },
-          {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto queda de ganancia operativa?',
-            tipo: 'dona', met: 'Margen Operativo Bruto (GOP)', labels: ['Ganancia operativa', 'Costos de operación'],
-            insight: () => { const m = M('Margen Operativo Bruto (GOP)'); return m ? `De cada $100 que entran, quedan <strong>$${fmt(m.Valor_Maximo, 1)} de ganancia operativa</strong> — un margen sano, pero que los costos de personal y energía están mordiendo año tras año. Los hoteles que ajustan turnos según la ocupación proyectada protegen este número.` : ''; }
-          },
-          {
-            cat: 'operativo', catLabel: 'Operativo', titulo: 'El peaje de los intermediarios',
-            tipo: 'compare',
-            items: () => {
-              const ota = M('Comisión de Intermediarios (OTAs)'), dir = M('Costo de Venta Directa (Web Propia)');
-              if (!ota || !dir) return null;
-              return [
-                { label: 'Reserva por Booking/Expedia (máx.)', valor: ota.Valor_Maximo, color: '#1A1A1A' },
-                { label: 'Reserva por web propia', valor: dir.Valor_Maximo, color: '#046307' }
-              ];
-            },
-            formato: 'pct',
-            insight: () => { const ota = M('Comisión de Intermediarios (OTAs)'), dir = M('Costo de Venta Directa (Web Propia)'); return (ota && dir) ? `Cada reserva que entra por un intermediario cuesta hasta <strong>${fmt(ota.Valor_Maximo)}% de comisión</strong>; por la web propia, cerca del <strong>${fmt(dir.Valor_Maximo)}%</strong>. Es decir, vender directo puede ser <strong>${fmt(ota.Valor_Maximo / dir.Valor_Maximo)} veces más barato</strong>. Presencia digital propia no es vanidad: es margen puro.` : ''; }
+            cat: 'financiero', catLabel: 'Rendimiento', titulo: 'Composición de Ingresos',
+            tipo: 'dona', met: 'Margen Operativo Bruto (GOP)', labels: ['Ganancia Operativa', 'Costos Operativos'],
+            insight: () => `El <strong>61.5%</strong> se consume en operación. Ajustar tarifas dinámicamente protege el 38.5% restante.`
           }
         ]
       },
-
       'Medicina': {
         emoji: '🏥',
         veredicto: {
-          titulo: 'Veredicto: negocio sólido que sangra por la agenda',
-          texto: () => `Un consultorio bien manejado deja márgenes del <strong>10 al 20%</strong> (las clínicas dentales llegan al 40%), con médicos que generan entre medio millón y un millón de dólares al año. Su fuga silenciosa no es la competencia: es la <strong>silla vacía</strong> — pacientes que no llegan a la cita y cuentas que nunca se cobran.`,
-          senales: ['✅ Demanda estable y creciente', '✅ Márgenes sólidos bien gestionado', '⚠️ Hasta 30% de citas incumplidas', '⚠️ Pérdidas de US$ 20–30 mil/mes por inasistencias', '💡 Recordatorios y datos recuperan ese dinero']
+          titulo: 'Sangrado por la silla vacía',
+          texto: () => `Negocio de altos ingresos donde el mayor enemigo no es el costo, sino el paciente ausente. Las inasistencias cuestan miles de dólares mensuales irrecuperables.`,
+          senales: ['✅ Alta recurrencia', '✅ Clínicas dentales al 40% margen', '⚠️ 30% Inasistencias', '💡 Recordatorios automáticos']
         },
         kpis: [
-          { met: 'Margen EBITDA Consultorio Médico', label: 'Margen de un consultorio', unidad: '% máximo', dec: 0, ctx: 'Un consultorio sano convierte 10–20% en ganancia.' },
-          { met: 'Ingreso Anual por Médico', label: 'Ingreso por médico', unidad: 'USD máx./año', dec: 0, ctx: 'Lo que genera cada profesional en un año.' },
-          { met: 'Tasa de Inasistencia de Pacientes (No-Show)', label: 'Citas incumplidas', unidad: '% máximo', dec: 0, ctx: 'En algunas especialidades, 3 de cada 10 no llegan.' }
+          { met: 'Ingreso Anual por Médico', label: 'Productividad', unidad: 'USD/Año', dec: 0, ctx: 'Generación promedio por profesional.' },
+          { met: 'Tasa de Inasistencia de Pacientes (No-Show)', label: 'Ausentismo', unidad: '% Citas', dec: 0, ctx: 'Pacientes que no llegan a la silla.' },
+          { met: 'Pérdida Mensual por Inasistencias', label: 'Fuga Mensual', unidad: 'USD/Mes', dec: 0, ctx: 'Dinero perdido por tiempos muertos.' }
         ],
         graficos: [
           {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto gana un consultorio vs una clínica dental?',
-            tipo: 'minmax', mets: ['Margen EBITDA Consultorio Médico', 'Margen Neto Clínica Dental'], labels: ['Consultorio médico', 'Clínica dental'],
-            insight: () => `Las clínicas dentales ganan el doble (<strong>30–40%</strong> vs 10–20%) por una razón de negocio, no de medicina: cobran de contado o en días, mientras el consultorio médico espera semanas a las aseguradoras. <strong>El flujo de caja define el margen.</strong>`
+            cat: 'financiero', catLabel: 'Rentabilidad', titulo: 'Medicina General vs Dental',
+            tipo: 'minmax', mets: ['Margen EBITDA Consultorio Médico', 'Margen Neto Clínica Dental'], labels: ['Medicina General', 'Dental'],
+            insight: () => `Odontología duplica márgenes (<strong>40%</strong> vs 20%) gracias a cobros directos y menor dependencia de aseguradoras.`
           },
           {
-            cat: 'operativo', catLabel: 'Operativo', titulo: 'La silla vacía: pacientes que no llegan',
-            tipo: 'minmax', mets: ['Tasa de Inasistencia de Pacientes (No-Show)'], labels: ['Citas incumplidas'],
-            insight: () => { const m = M('Tasa de Inasistencia de Pacientes (No-Show)'), p = M('Pérdida Mensual por Inasistencias'); return m ? `Entre <strong>${fmt(m.Valor_Minimo)}% y ${fmt(m.Valor_Maximo)}%</strong> de las citas se incumplen${p ? `, lo que cuesta entre <strong>US$ ${fmt(p.Valor_Minimo)} y ${fmt(p.Valor_Maximo)} al mes</strong> por consultorio` : ''}. La renta, el personal y los equipos se pagan igual con la silla vacía. <strong>Recordatorios automáticos y listas de espera inteligentes recuperan gran parte de esa plata.</strong>` : ''; }
-          },
-          {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto genera cada médico al año?',
-            tipo: 'minmax', mets: ['Ingreso Anual por Médico'], labels: ['Ingreso por médico'],
-            insight: () => { const m = M('Ingreso Anual por Médico'); return m ? `Cada profesional genera entre <strong>US$ ${fmt(m.Valor_Minimo)} y US$ ${fmt(m.Valor_Maximo)}</strong> al año. La diferencia entre el piso y el techo está en la densidad de la agenda: cada hora sin paciente es dinero que la clínica ya gastó.` : ''; }
-          },
-          {
-            cat: 'operativo', catLabel: 'Operativo', titulo: '¿Se cobra todo lo que se trabaja?',
-            tipo: 'minmax', mets: ['Tasa de Cobro Efectivo'], labels: ['Tasa de cobro'],
-            insight: () => { const m = M('Tasa de Cobro Efectivo'), d = M('Días de Cartera (Cuentas por Cobrar)'); return m ? `Un consultorio sano cobra al menos el <strong>${fmt(m.Valor_Minimo)}%</strong> de lo facturado; los mejores llegan al <strong>${fmt(m.Valor_Maximo)}%</strong>${d ? ` y recuperan su cartera en menos de <strong>${fmt(d.Valor_Maximo)} días</strong>` : ''}. Cada punto por debajo es trabajo médico regalado — y solo se detecta si alguien lo está midiendo.` : ''; }
+            cat: 'operativo', catLabel: 'Flujo de Caja', titulo: 'Tasa de Recaudo',
+            tipo: 'minmax', mets: ['Tasa de Cobro Efectivo'], labels: ['Cobro Efectivo (%)'],
+            insight: () => `Los mejores cobran el <strong>99%</strong>. Consultorios promedio pierden un 10% en disputas con seguros y pacientes.`
           }
         ]
       },
-
       'Joyería': {
         emoji: '💍',
         veredicto: {
-          titulo: 'Veredicto: márgenes de lujo, capital dormido en vitrina',
-          texto: () => `La joyería mueve entre <strong>US$ 243 y 381 mil millones al año</strong> con márgenes brutos del <strong>40 al 60%</strong> — de los mejores del comercio. Su talón de Aquiles: el inventario rota apenas <strong>1 vez al año</strong> (la ropa rota 4–6 veces). Cada pieza equivocada en vitrina es capital congelado durante meses.`,
-          senales: ['✅ Márgenes brutos de 40–60%', '✅ Mercado creciendo ~5% anual', '⚠️ Inventario carísimo y lento', '⚠️ Precio del oro en máximos históricos', '💡 Saber qué pieza rota y cuál no = oro puro']
+          titulo: 'Lujo con capital inmovilizado',
+          texto: () => `Márgenes espectaculares del 60%, castigados por un inventario que rota una sola vez al año. El dinero duerme en las vitrinas de cristal.`,
+          senales: ['✅ Márgenes de 60%', '✅ Ticket altísimo', '⚠️ Rotación anual 1x', '💡 Data de tendencias vital']
         },
         kpis: [
-          { met: 'Tamaño del Mercado', label: 'Mercado global', unidad: 'mil millones USD', dec: 1, ctx: 'Ventas mundiales de joyería al año.' },
-          { met: 'Margen Bruto Joyería Fina', label: 'Margen bruto', unidad: '% máximo', dec: 0, ctx: 'De cada $100 vendidos, hasta $60 quedan brutos.' },
-          { met: 'Rotación de Inventario Anual', label: 'Rotación de inventario', unidad: 'veces/año', dec: 1, ctx: 'El inventario se vende apenas 1–1.5 veces al año.' }
+          { met: 'Tamaño del Mercado', label: 'Mercado', unidad: 'Billones USD', dec: 1, ctx: 'Mercado resiliente a crisis.' },
+          { met: 'Margen Bruto Joyería Fina', label: 'Margen Bruto', unidad: '% Max', dec: 0, ctx: 'Markup excepcional de industria.' },
+          { met: 'Rotación de Inventario Anual', label: 'Rotación', unidad: 'Veces/Año', dec: 1, ctx: 'Velocidad de venta del stock.' }
         ],
         graficos: [
           {
-            cat: 'mercado', catLabel: 'Mercado', titulo: '¿Qué tan grande es el negocio?',
-            tipo: 'minmax', mets: ['Tamaño del Mercado'], labels: ['Mercado global (mil millones)'],
-            insight: () => { const c = M('Crecimiento (CAGR)'); return `Las mediciones del mercado van de <strong>US$ 243 a 381 mil millones</strong> según la fuente — y todas coinciden en que crece <strong>${c ? fmt(c.Valor_Minimo, 1) + '–' + fmt(c.Valor_Maximo, 1) : '~5'}% al año</strong>, empujado por Asia y por la venta online. No es un mercado de nicho: es lujo masivo.`; }
+            cat: 'mercado', catLabel: 'Distribución', titulo: 'Canales de Venta',
+            tipo: 'dona', met: 'Venta en Tienda Física (Cuota)', labels: ['Física', 'Online'],
+            insight: () => `La tienda física retiene el <strong>83.9%</strong> por la necesidad de confianza, pero el e-commerce absorbe el crecimiento nuevo.`
           },
           {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Qué margen deja cada pieza?',
-            tipo: 'minmax', mets: ['Margen Bruto Joyería Fina'], labels: ['Margen bruto'],
-            insight: () => { const m = M('Margen Bruto Joyería Fina'); return m ? `La joyería fina deja entre <strong>${fmt(m.Valor_Minimo)}% y ${fmt(m.Valor_Maximo)}%</strong> de margen bruto — y el trabajo a medida y las reparaciones superan el 60%. El riesgo: con el oro en máximos, una pieza cotizada con el precio del metal de hace 6 meses puede perder 10–15 puntos de margen <strong>sin que nadie lo note hasta el cierre del mes</strong>.` : ''; }
-          },
-          {
-            cat: 'operativo', catLabel: 'Operativo', titulo: 'El dinero dormido en la vitrina',
-            tipo: 'minmax', mets: ['Rotación de Inventario Anual'], labels: ['Rotación anual'],
-            insight: () => `Una joyería vende su inventario completo apenas <strong>1 a 1.5 veces al año</strong>, contra 4–6 veces en moda. Traducción: el capital duerme meses en vitrina. Saber con datos <strong>cuál categoría rota y cuál acumula polvo</strong> es la decisión de compra más rentable del negocio.`
-          },
-          {
-            cat: 'mercado', catLabel: 'Mercado', titulo: '¿Dónde se vende la joyería?',
-            tipo: 'dona', met: 'Venta en Tienda Física (Cuota)', labels: ['Tienda física', 'Canal online'],
-            insight: () => { const m = M('Venta en Tienda Física (Cuota)'), a = M('Anillos (Cuota de Ventas)'); return m ? `La tienda física domina con <strong>${fmt(m.Valor_Maximo, 1)}%</strong> — la confianza se construye en persona — pero el canal online es el que más rápido crece. ${a ? `Y un dato para la vitrina: <strong>los anillos son ${fmt(a.Valor_Maximo, 1)}% de las ventas</strong> — el mercado de bodas y compromisos nunca pasa de moda.` : ''}` : ''; }
+            cat: 'operativo', catLabel: 'Eficiencia', titulo: 'El problema del Stock',
+            tipo: 'minmax', mets: ['Rotación de Inventario Anual'], labels: ['Rotación Anual'],
+            insight: () => `Con una rotación de <strong>1.5x</strong>, optimizar el mix de productos mediante analítica previene quiebres de caja.`
           }
         ]
       },
-
       'Inmobiliaria': {
         emoji: '🏠',
         veredicto: {
-          titulo: 'Veredicto: mercado colosal donde gana el que responde primero',
-          texto: () => `El sector inmobiliario mueve más de <strong>US$ 4 billones al año</strong> con comisiones del 5–6% por venta. El secreto incómodo: el agente promedio convierte apenas el <strong>1% de sus contactos</strong>, mientras los mejores convierten 3–9% — con los mismos prospectos. La diferencia no es el mercado: es el seguimiento.`,
-          senales: ['✅ Mercado gigantesco (US$ 4+ billones)', '✅ Comisiones altas por transacción', '⚠️ Agente promedio convierte solo ~1%', '⚠️ Ciclos de venta de 4–6 meses', '💡 Responder en 5 minutos multiplica el cierre']
+          titulo: 'El imperio de la velocidad',
+          texto: () => `Comisiones masivas en un mercado de US$ 4 billones, donde la diferencia entre cerrar y perder está en responder en los primeros 5 minutos.`,
+          senales: ['✅ Comisiones altas', '✅ Mercado masivo', '⚠️ Conversión general baja (1%)', '💡 Velocidad de respuesta lo es todo']
         },
         kpis: [
-          { met: 'Tamaño del Mercado', label: 'Mercado global', unidad: 'mil millones USD', dec: 0, ctx: 'El sector inmobiliario mundial de servicios y transacciones.' },
-          { met: 'Comisión de Venta Típica', label: 'Comisión por venta', unidad: '% máximo', dec: 0, ctx: 'Lo que deja cada transacción cerrada.' },
-          { met: 'Conversión de Prospectos (Agente Promedio)', label: 'Conversión promedio', unidad: '% máximo', dec: 1, ctx: 'De cada 100 interesados, ~1 termina comprando con el agente.' }
+          { met: 'Comisión de Venta Típica', label: 'Comisión', unidad: '% por Cierre', dec: 0, ctx: 'Retorno directo por transacción.' },
+          { met: 'Costo por Prospecto (Lead)', label: 'Costo Lead', unidad: 'USD', dec: 0, ctx: 'Costo publicitario por interesado.' },
+          { met: 'Conversión de Prospectos (Agente Promedio)', label: 'Cierre', unidad: '% Conversión', dec: 1, ctx: 'Eficiencia del embudo de ventas.' }
         ],
         graficos: [
           {
-            cat: 'mercado', catLabel: 'Mercado', titulo: 'Un mercado de billones',
-            tipo: 'minmax', mets: ['Tamaño del Mercado'], labels: ['Mercado global (mil millones)'],
-            insight: () => { const c = M('Crecimiento (CAGR)'); return `Más de <strong>US$ 4 billones al año</strong> creciendo ${c ? `entre <strong>${fmt(c.Valor_Minimo, 1)}% y ${fmt(c.Valor_Maximo, 1)}%</strong> anual` : 'con fuerza'}, impulsado por urbanización y vivienda en alquiler. Y América Latina está entre las regiones con mejor impulso.`; }
+            cat: 'operativo', catLabel: 'Comportamiento', titulo: 'Regla del Primer Contacto',
+            tipo: 'dona', met: 'Clientes que Eligen al Primero que Responde', labels: ['Primer Agente', 'Otros'],
+            insight: () => `El <strong>78%</strong> de clientes se queda con quien contesta primero. La automatización de leads multiplica ingresos.`
           },
           {
-            cat: 'operativo', catLabel: 'Operativo', titulo: 'El embudo de la verdad',
-            tipo: 'compare',
-            items: () => {
-              const p = M('Conversión de Prospectos (Agente Promedio)'), e = M('Conversión de Prospectos (Agente Élite)');
-              if (!p || !e) return null;
-              return [
-                { label: 'Agente promedio (máx.)', valor: p.Valor_Maximo, color: '#1A1A1A' },
-                { label: 'Agente élite (máx.)', valor: e.Valor_Maximo, color: '#046307' }
-              ];
-            },
-            formato: 'pct',
-            insight: () => { const p = M('Conversión de Prospectos (Agente Promedio)'), e = M('Conversión de Prospectos (Agente Élite)'); return (p && e) ? `Con <strong>los mismos prospectos y el mismo mercado</strong>, el agente élite cierra hasta <strong>${fmt(e.Valor_Maximo / p.Valor_Maximo, 0)} veces más</strong> que el promedio. ¿Su arma? Seguimiento disciplinado y ordenado: la mayoría de agentes abandona un contacto tras 1 o 2 intentos.` : ''; }
-          },
-          {
-            cat: 'financiero', catLabel: 'Financiero', titulo: '¿Cuánto cuesta conseguir un interesado?',
-            tipo: 'minmax', mets: ['Costo por Prospecto (Lead)'], labels: ['Costo por prospecto'],
-            insight: () => { const m = M('Costo por Prospecto (Lead)'); return m ? `Cada interesado cuesta entre <strong>US$ ${fmt(m.Valor_Minimo)} y ${fmt(m.Valor_Maximo)}</strong> en publicidad. Con conversiones del 1%, se necesitan ~100 prospectos por cierre. La matemática es brutal: <strong>mejorar la conversión vale más que comprar más prospectos.</strong>` : ''; }
-          },
-          {
-            cat: 'operativo', catLabel: 'Operativo', titulo: 'La regla de los 5 minutos',
-            tipo: 'dona', met: 'Clientes que Eligen al Primero que Responde', labels: ['Eligen al primero que responde', 'Eligen a otro'],
-            insight: () => { const m = M('Clientes que Eligen al Primero que Responde'); return m ? `<strong>${fmt(m.Valor_Maximo)} de cada 100 compradores trabajan con el primer agente que les responde.</strong> Quien contesta en 5 minutos multiplica sus posibilidades frente a quien tarda una hora. La velocidad de respuesta — automatizable — vale más que cualquier campaña.` : ''; }
+            cat: 'financiero', catLabel: 'Desempeño', titulo: 'Agente Promedio vs Élite',
+            tipo: 'compare', items: () => { const p = M('Conversión de Prospectos (Agente Promedio)'), e = M('Conversión de Prospectos (Agente Élite)'); if(!p||!e) return null; return [{label:'Promedio', valor:p.Valor_Maximo, color:'#1A1A1A'}, {label:'Élite', valor:e.Valor_Maximo, color:'#046307'}]; }, formato: 'pct',
+            insight: () => `Un CRM robusto eleva la conversión del <strong>1.2% al 9%</strong> con el mismo presupuesto publicitario.`
           }
         ]
       }
     };
 
     // =========================================================
-    //   MOTOR DE RENDERIZADO ASÍNCRONO (Con Transiciones)
+    //   MOTOR DE RENDERIZADO ASÍNCRONO
     // =========================================================
 
     async function cargarDashboard() {
       document.getElementById('errorBox').classList.remove('visible');
-      clearTimeout(timerAviso);
-      timerAviso = setTimeout(() => {
-        document.getElementById('avisoEspera').classList.add('visible');
-      }, 6000);
+      timerAviso = setTimeout(() => document.getElementById('avisoEspera').classList.add('visible'), 6000);
 
       try {
         const respuesta = await fetch(URL_BACKEND);
         if (!respuesta.ok) throw new Error(`Error HTTP: ${respuesta.status}`);
-        const datos = await respuesta.json();
-
+        datosGlobales = await respuesta.json();
+        
         clearTimeout(timerAviso);
         document.getElementById('avisoEspera').classList.remove('visible');
 
-        datosGlobales = datos;
-        Chart.defaults.font.family = 'Inter';
-        Chart.defaults.color = '#1A1A1A';
-
+        Chart.defaults.font.family = 'Inter'; Chart.defaults.color = '#52525B';
         construirSelector();
-        // Renderizado inicial sin fade-out
         await renderizarIndustriaCore(Object.keys(agruparIndustrias())[0]);
 
       } catch (error) {
-        console.error("Fallo de conexión con la API:", error);
-        clearTimeout(timerAviso);
-        document.getElementById('avisoEspera').classList.remove('visible');
-        document.getElementById('errorDetalle').textContent =
-          `Detalle técnico: ${error.message}. Si el servidor estaba dormido, espere unos segundos y reintente.`;
+        clearTimeout(timerAviso); document.getElementById('avisoEspera').classList.remove('visible');
+        document.getElementById('errorDetalle').textContent = error.message;
         document.getElementById('errorBox').classList.add('visible');
       }
     }
 
-    function agruparIndustrias() {
-      const grupos = {};
-      datosGlobales.forEach(d => {
-        const ind = d['Industria'] ?? 'Piedra y Superficies';
-        grupos[ind] = true;
-      });
-      return grupos;
-    }
+    function agruparIndustrias() { const g = {}; datosGlobales.forEach(d => g[d['Industria'] ?? 'Piedra y Superficies'] = true); return g; }
 
     function construirSelector() {
       const cont = document.getElementById('selectorIndustria');
-      cont.innerHTML = '';
       Object.keys(agruparIndustrias()).forEach(ind => {
-        const cfg = CONFIG[ind];
         const btn = document.createElement('button');
         btn.className = 'ind-chip';
-        btn.innerHTML = `<span class="emoji">${cfg?.emoji ?? '📊'}</span>${ind}`;
-        btn.addEventListener('click', () => renderizarIndustria(ind));
+        btn.innerHTML = `<span class="emoji">${CONFIG[ind]?.emoji ?? '📊'}</span>${ind}`;
+        btn.onclick = () => renderizarIndustria(ind);
         btn.dataset.ind = ind;
         cont.appendChild(btn);
       });
     }
 
-    // Función envoltorio para animar la transición
     async function renderizarIndustria(industria) {
       if(industriaActiva === industria) return;
-      
       const c = document.getElementById('contenido');
-      
-      // 1. Fade out suave
       c.classList.add('oculto');
-      
-      // 2. Esperar a que la animación termine (300ms)
       await new Promise(r => setTimeout(r, 300));
-      
-      // 3. Renderizar el nuevo contenido
       await renderizarIndustriaCore(industria);
-      
-      // 4. Fade in
-      requestAnimationFrame(() => {
-        c.classList.remove('oculto');
-      });
+      requestAnimationFrame(() => c.classList.remove('oculto'));
     }
 
-    // La lógica de renderizado principal (Extraída para reutilizarla)
     async function renderizarIndustriaCore(industria) {
       industriaActiva = industria;
-      document.querySelectorAll('.ind-chip').forEach(b =>
-        b.classList.toggle('activo', b.dataset.ind === industria));
+      document.querySelectorAll('.ind-chip').forEach(b => b.classList.toggle('activo', b.dataset.ind === industria));
       document.getElementById('tituloIndustria').textContent = industria;
-
-      charts.forEach(c => c.destroy());
-      charts = [];
+      charts.forEach(c => c.destroy()); charts = [];
 
       const cfg = CONFIG[industria];
       const c = document.getElementById('contenido');
-
-      if (!cfg) {
-        c.innerHTML = `<div class="error-box visible"><h3>Industria sin configuración</h3><p>Hay datos de "${industria}" en la base, pero el dashboard aún no tiene su capa de análisis.</p></div>`;
-        return;
-      }
+      if (!cfg) return;
 
       const categorias = [...new Set(cfg.graficos.map(g => g.cat))];
-      const nombresCat = { financiero: '💰 Dinero', mercado: '🌍 Mercado', operativo: '⚙️ Operación' };
+      const nombresCat = { financiero: '💰 Financiero', mercado: '🌍 Mercado', operativo: '⚙️ Operativo' };
 
+      // Layout Grid (Veredicto Izq + KPIs Der) + Animaciones Shadcn Staggered
       c.innerHTML = `
-        <div class="veredicto scroll-respiro">
-          <h2>${cfg.veredicto.titulo}</h2>
-          <p>${cfg.veredicto.texto()}</p>
-          <div class="senales">${cfg.veredicto.senales.map(s => `<span class="senal">${s}</span>`).join('')}</div>
+        <div class="grid-superior">
+          <div class="veredicto anim-blur-fade d-1">
+            <div>
+              <h2>${cfg.veredicto.titulo}</h2>
+              <p>${cfg.veredicto.texto()}</p>
+            </div>
+            <div class="senales">${cfg.veredicto.senales.map(s => `<span class="senal">${s}</span>`).join('')}</div>
+          </div>
+
+          <div class="grid-kpis">
+            ${cfg.kpis.map((k, i) => `
+              <div class="card anim-blur-fade d-2">
+                <div class="card-header">
+                  <h3>${k.label}</h3>
+                </div>
+                <div>
+                  <div class="valor"><span id="kpi${i}"></span><span class="unidad">${k.unidad}</span></div>
+                  <p class="contexto">${k.ctx}</p>
+                </div>
+              </div>`).join('')}
+          </div>
         </div>
 
-        <div class="grid-kpis">
-          ${cfg.kpis.map((k, i) => {
-            const m = M(k.met);
-            return `<div class="card scroll-respiro">
-              <h3>${k.label}</h3>
-              <div class="valor"><span id="kpi${i}"></span><span class="unidad">${k.unidad}</span></div>
-              <p class="contexto">${k.ctx}</p>
-            </div>`;
-          }).join('')}
-        </div>
-
-        <div class="filtros scroll-respiro" id="filtros">
+        <div class="filtros anim-blur-fade d-3" id="filtros">
           <button class="chip activo" data-cat="todos">Ver todo</button>
           ${categorias.map(cat => `<button class="chip" data-cat="${cat}">${nombresCat[cat] ?? cat}</button>`).join('')}
         </div>
 
         <div class="graficos">
           ${cfg.graficos.map((g, i) => `
-            <div class="panel scroll-respiro" data-cat="${g.cat}" id="panel${i}">
-              <h3>${g.titulo}</h3>
-              <p class="cat-tag">${g.catLabel}</p>
+            <div class="panel anim-blur-fade d-4" data-cat="${g.cat}" id="panel${i}">
+              <div class="panel-header">
+                <h3>${g.titulo}</h3>
+                <p class="cat-tag">${g.catLabel}</p>
+              </div>
               <canvas id="ch${i}"></canvas>
               <div class="insight">
-                <span class="titulo-insight">💡 ¿Qué significa esto?</span>
                 ${g.insight()}
               </div>
             </div>`).join('')}
@@ -974,155 +601,52 @@
       `;
 
       cfg.kpis.forEach((k, i) => {
-        const m = M(k.met);
-        const el = document.getElementById(`kpi${i}`);
+        const el = document.getElementById(`kpi${i}`), m = M(k.met);
         if (m && el) animarValor(el, m.Valor_Maximo, k.dec);
-        else if (el) el.textContent = '—';
       });
 
       cfg.graficos.forEach((g, i) => {
-        const canvas = document.getElementById(`ch${i}`);
-        const chart = construirGrafico(g, canvas);
-        if (chart) charts.push(chart);
-        else document.getElementById(`panel${i}`)?.classList.add('oculto');
+        const chart = construirGrafico(g, document.getElementById(`ch${i}`));
+        if (chart) charts.push(chart); else document.getElementById(`panel${i}`)?.classList.add('oculto');
       });
 
-      activarFiltros();
-      iniciarRespiracionScroll(); // Adjuntamos el observador a los nuevos elementos generados
+      // Filtros
+      const chips = document.querySelectorAll('#filtros .chip'), paneles = document.querySelectorAll('.panel');
+      chips.forEach(chip => chip.onclick = () => {
+        chips.forEach(c => c.classList.remove('activo')); chip.classList.add('activo');
+        paneles.forEach(p => p.classList.toggle('oculto', chip.dataset.cat !== 'todos' && p.dataset.cat !== chip.dataset.cat));
+      });
     }
 
     function construirGrafico(g, canvas) {
+      const opts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 6, font: {family: 'Inter', size: 12} } }, tooltip: tooltipBase } };
+      
       if (g.tipo === 'minmax') {
-        const mets = g.mets.map(n => M(n));
-        if (mets.some(m => !m)) return null;
-        return new Chart(canvas, {
-          type: 'bar',
-          data: {
-            labels: g.labels,
-            datasets: [
-              { label: 'Mínimo', data: mets.map(m => m.Valor_Minimo), backgroundColor: '#1A1A1A', borderRadius: 8 },
-              { label: 'Máximo', data: mets.map(m => m.Valor_Maximo), backgroundColor: '#046307', borderRadius: 8, hoverBackgroundColor: '#D4AF37' }
-            ]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { position: 'bottom', labels: { usePointStyle: true, font: { size: 12 } } },
-              tooltip: { ...tooltipBase, callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmt(ctx.parsed.y, ctx.parsed.y < 100 ? 1 : 0)}` } }
-            },
-            scales: {
-              y: { beginAtZero: true, grid: { color: 'rgba(26,26,26,0.06)' }, ticks: { callback: v => fmt(v) } },
-              x: { grid: { display: false } }
-            }
-          }
-        });
+        const mets = g.mets.map(n => M(n)); if (mets.some(m => !m)) return null;
+        return new Chart(canvas, { type: 'bar', data: { labels: g.labels, datasets: [{ label: 'Mínimo', data: mets.map(m => m.Valor_Minimo), backgroundColor: '#09090B', borderRadius: 6 }, { label: 'Máximo', data: mets.map(m => m.Valor_Maximo), backgroundColor: '#046307', borderRadius: 6 }] }, options: { ...opts, scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, border: {display: false} }, x: { grid: { display: false }, border: {display: false} } } } });
       }
-
       if (g.tipo === 'dona') {
-        const m = M(g.met);
-        if (!m) return null;
-        return new Chart(canvas, {
-          type: 'doughnut',
-          data: {
-            labels: g.labels,
-            datasets: [{
-              data: [m.Valor_Maximo, Math.max(0, 100 - m.Valor_Maximo)],
-              backgroundColor: ['#D4AF37', '#1A1A1A'],
-              borderColor: '#ffffff',
-              borderWidth: 4,
-              hoverOffset: 12
-            }]
-          },
-          options: {
-            responsive: true,
-            cutout: '68%',
-            plugins: {
-              legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, font: { size: 13 } } },
-              tooltip: { ...tooltipBase, callbacks: { label: ctx => ` ${ctx.label}: ${fmt(ctx.parsed, 1)}%` } }
-            }
-          }
-        });
+        const m = M(g.met); if (!m) return null;
+        return new Chart(canvas, { type: 'doughnut', data: { labels: g.labels, datasets: [{ data: [m.Valor_Maximo, Math.max(0, 100 - m.Valor_Maximo)], backgroundColor: ['#D4AF37', '#09090B'], borderWidth: 0, hoverOffset: 8 }] }, options: { ...opts, cutout: '75%' } });
       }
-
       if (g.tipo === 'compare') {
-        const items = g.items();
-        if (!items) return null;
-        return new Chart(canvas, {
-          type: 'bar',
-          data: {
-            labels: items.map(it => it.label),
-            datasets: [{ data: items.map(it => it.valor), backgroundColor: items.map(it => it.color), borderRadius: 8 }]
-          },
-          options: {
-            indexAxis: 'y',
-            responsive: true,
-            plugins: {
-              legend: { display: false },
-              tooltip: { ...tooltipBase, callbacks: { label: ctx => g.formato === 'usd' ? ' USD ' + fmt(ctx.parsed.x) : ' ' + fmt(ctx.parsed.x, 1) + '%' } }
-            },
-            scales: {
-              x: { beginAtZero: true, grid: { color: 'rgba(26,26,26,0.06)' }, ticks: { callback: v => g.formato === 'usd' ? fmt(v / 1000) + 'k' : v + '%' } },
-              y: { grid: { display: false }, ticks: { font: { size: 12 } } }
-            }
-          }
-        });
+        const items = g.items(); if (!items) return null;
+        return new Chart(canvas, { type: 'bar', data: { labels: items.map(it => it.label), datasets: [{ data: items.map(it => it.valor), backgroundColor: items.map(it => it.color), borderRadius: 6 }] }, options: { ...opts, indexAxis: 'y', plugins: { ...opts.plugins, legend: { display: false } }, scales: { x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, border: {display: false} }, y: { grid: { display: false }, border: {display: false} } } } });
       }
-
       if (g.tipo === 'zona') {
-        const m = M(g.met);
-        if (!m) return null;
-        return new Chart(canvas, {
-          type: 'bar',
-          data: {
-            labels: ['Uso de las máquinas'],
-            datasets: [
-              { label: `Zona de pérdida (0–${fmt(m.Valor_Minimo)}%)`, data: [m.Valor_Minimo], backgroundColor: 'rgba(179, 38, 30, 0.85)', borderRadius: { topLeft: 8, bottomLeft: 8 } },
-              { label: `Zona de ganancia (${fmt(m.Valor_Minimo)}–${fmt(m.Valor_Maximo)}%)`, data: [m.Valor_Maximo - m.Valor_Minimo], backgroundColor: '#046307', borderRadius: { topRight: 8, bottomRight: 8 } }
-            ]
-          },
-          options: {
-            indexAxis: 'y',
-            responsive: true,
-            plugins: {
-              legend: { position: 'bottom', labels: { usePointStyle: true, font: { size: 12 } } },
-              tooltip: { ...tooltipBase, callbacks: { label: ctx => ` ${ctx.dataset.label}` } }
-            },
-            scales: {
-              x: { stacked: true, max: 100, grid: { color: 'rgba(26,26,26,0.06)' }, ticks: { callback: v => v + '%' } },
-              y: { stacked: true, grid: { display: false } }
-            }
-          }
-        });
+        const m = M(g.met); if (!m) return null;
+        return new Chart(canvas, { type: 'bar', data: { labels: ['Uso CNC'], datasets: [{ label: `Riesgo (0–${fmt(m.Valor_Minimo)}%)`, data: [m.Valor_Minimo], backgroundColor: '#EF4444', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: `Ganancia (${fmt(m.Valor_Minimo)}–${fmt(m.Valor_Maximo)}%)`, data: [m.Valor_Maximo - m.Valor_Minimo], backgroundColor: '#046307', borderRadius: { topRight: 6, bottomRight: 6 } }] }, options: { ...opts, indexAxis: 'y', scales: { x: { stacked: true, max: 100, grid: { color: 'rgba(0,0,0,0.05)' }, border: {display: false} }, y: { stacked: true, grid: { display: false }, border: {display: false} } } } });
       }
-
       return null;
     }
 
-    function activarFiltros() {
-      const chips = document.querySelectorAll('#filtros .chip');
-      const paneles = document.querySelectorAll('.panel');
-      chips.forEach(chip => {
-        chip.addEventListener('click', () => {
-          chips.forEach(c => c.classList.remove('activo'));
-          chip.classList.add('activo');
-          const cat = chip.dataset.cat;
-          paneles.forEach(p => {
-            p.classList.toggle('oculto', cat !== 'todos' && p.dataset.cat !== cat);
-          });
-        });
-      });
-    }
-
-    function animarValor(el, valorFinal, decimales = 0) {
-      const duracion = 1200;
-      const inicio = performance.now();
-      function paso(ahora) {
-        const p = Math.min((ahora - inicio) / duracion, 1);
-        const s = 1 - Math.pow(1 - p, 4); 
-        el.textContent = fmt(valorFinal * s, decimales);
+    function animarValor(el, valor, dec = 0) {
+      const start = performance.now();
+      requestAnimationFrame(function paso(ahora) {
+        const p = Math.min((ahora - start) / 1000, 1);
+        el.textContent = fmt(valor * (1 - Math.pow(1 - p, 4)), dec);
         if (p < 1) requestAnimationFrame(paso);
-      }
-      requestAnimationFrame(paso);
+      });
     }
 
     cargarDashboard();
