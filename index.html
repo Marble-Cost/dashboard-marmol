@@ -24,7 +24,7 @@
       --vidrio-borde: rgba(255, 255, 255, 0.8);
       --vidrio-reflejo: inset 0 1px 1px rgba(255, 255, 255, 0.9), inset 0 0 20px rgba(255, 255, 255, 0.3);
       
-      /* Sombras de profundidad */
+      /* Sombras y Transiciones */
       --sombra-suave: 0 8px 32px rgba(26, 26, 26, 0.05);
       --sombra-elevada: 0 16px 48px rgba(4, 99, 7, 0.08);
       --transicion: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -41,6 +41,30 @@
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
+    }
+
+    /* ===== Luz de Cursor Inmersiva ===== */
+    .cursor-glow {
+      position: fixed;
+      top: 0; left: 0;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 50%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.4s ease;
+      opacity: 0;
+      mix-blend-mode: multiply;
+    }
+
+    /* ===== Layout Centrado y Estructurado ===== */
+    .layout-central {
+      max-width: 1350px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     /* ===== Scrollbar Premium ===== */
@@ -64,24 +88,10 @@
       opacity: 0.35;
       animation: flotar 20s infinite ease-in-out alternate;
     }
-    .orb-1 {
-      width: 45vw; height: 45vw;
-      background: var(--dorado);
-      top: -10%; left: -10%;
-    }
-    .orb-2 {
-      width: 55vw; height: 55vw;
-      background: var(--verde-esmeralda);
-      bottom: -15%; right: -10%;
-      animation-delay: -5s;
-    }
-    .orb-3 {
-      width: 35vw; height: 35vw;
-      background: #F3E5B0;
-      top: 40%; left: 40%;
-      animation-delay: -10s;
-      opacity: 0.4;
-    }
+    .orb-1 { width: 45vw; height: 45vw; background: var(--dorado); top: -10%; left: -10%; }
+    .orb-2 { width: 55vw; height: 55vw; background: var(--verde-esmeralda); bottom: -15%; right: -10%; animation-delay: -5s; }
+    .orb-3 { width: 35vw; height: 35vw; background: #F3E5B0; top: 40%; left: 40%; animation-delay: -10s; opacity: 0.4; }
+    
     @keyframes flotar {
       0% { transform: translate(0, 0) scale(1); }
       100% { transform: translate(50px, 80px) scale(1.15); }
@@ -102,7 +112,10 @@
       padding-bottom: 24px;
       margin-bottom: 30px;
       border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-      animation: entrada 0.8s var(--transicion) both;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .eyebrow {
       font-size: 0.75rem;
@@ -112,10 +125,11 @@
       color: var(--dorado);
       margin: 0 0 12px 0;
       display: inline-block;
-      padding: 4px 12px;
+      padding: 6px 16px;
       background: rgba(212, 175, 55, 0.1);
       border-radius: 20px;
       border: 1px solid rgba(212, 175, 55, 0.3);
+      backdrop-filter: blur(10px);
     }
     h1 {
       font-family: 'Marcellus', serif;
@@ -123,7 +137,6 @@
       font-size: clamp(2rem, 5vw, 3.2rem);
       font-weight: 400;
       line-height: 1.1;
-      /* Gradiente de texto */
       background: linear-gradient(135deg, var(--verde-esmeralda) 0%, #083b0a 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -134,6 +147,7 @@
       font-weight: 500;
       color: rgba(26, 26, 26, 0.7);
       margin: 12px 0 0 0;
+      max-width: 600px;
     }
 
     /* ===== Selector de industria ===== */
@@ -144,7 +158,7 @@
       padding: 10px 4px 20px 4px;
       margin-bottom: 24px;
       -webkit-overflow-scrolling: touch;
-      animation: entrada 0.8s var(--transicion) 0.1s both;
+      justify-content: center;
     }
     .ind-chip {
       flex: 0 0 auto;
@@ -170,7 +184,7 @@
     .ind-chip:hover { 
       transform: translateY(-3px); 
       border-color: var(--dorado);
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.9);
       box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15), var(--vidrio-reflejo);
     }
     .ind-chip:active { transform: translateY(1px) scale(0.98); }
@@ -179,6 +193,31 @@
       border-color: rgba(243, 229, 176, 0.6);
       color: white;
       box-shadow: 0 12px 30px rgba(4, 99, 7, 0.4), inset 0 1px 1px rgba(255,255,255,0.2);
+    }
+
+    /* ===== Contenedor Dinámico (Transiciones al cambiar industria) ===== */
+    .transicion-contenido {
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 1;
+      transform: translateY(0);
+      width: 100%;
+    }
+    .transicion-contenido.oculto {
+      opacity: 0;
+      transform: translateY(15px) scale(0.99);
+      pointer-events: none;
+    }
+
+    /* ===== Elementos que "Respiran" (Scroll Reveal) ===== */
+    .scroll-respiro {
+      opacity: 0;
+      transform: translateY(30px) scale(0.98);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .scroll-respiro.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
     }
 
     /* ===== Veredicto (Cristal Oscuro) ===== */
@@ -194,22 +233,18 @@
       padding: clamp(24px, 4vw, 36px);
       margin-bottom: 32px;
       box-shadow: 0 16px 40px rgba(4, 99, 7, 0.25), inset 0 1px 1px rgba(255,255,255,0.2);
-      animation: entrada 0.8s var(--transicion) both;
     }
     .veredicto::before {
       content: '';
       position: absolute;
       top: 0; left: -100%;
       width: 50%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
       transform: skewX(-25deg);
       animation: reflejo 6s infinite;
     }
-    @keyframes reflejo {
-      0% { left: -100%; }
-      20% { left: 200%; }
-      100% { left: 200%; }
-    }
+    @keyframes reflejo { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+    
     .veredicto h2 {
       font-family: 'Marcellus', serif;
       font-size: clamp(1.3rem, 3.5vw, 1.8rem);
@@ -217,12 +252,7 @@
       color: #F3E5B0;
       text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
-    .veredicto p {
-      margin: 0 0 20px 0;
-      font-size: clamp(0.95rem, 2.2vw, 1.05rem);
-      line-height: 1.6;
-      color: rgba(255,255,255,0.95);
-    }
+    .veredicto p { margin: 0 0 20px 0; font-size: clamp(0.95rem, 2.2vw, 1.05rem); line-height: 1.6; color: rgba(255,255,255,0.95); }
     .senales { display: flex; flex-wrap: wrap; gap: 10px; }
     .senal {
       background: rgba(255, 255, 255, 0.1);
@@ -233,16 +263,12 @@
       font-weight: 500;
       transition: all var(--transicion);
     }
-    .senal:hover { 
-      background: rgba(255,255,255,0.2); 
-      border-color: rgba(243, 229, 176, 0.6);
-      transform: translateY(-2px); 
-    }
+    .senal:hover { background: rgba(255,255,255,0.2); border-color: rgba(243, 229, 176, 0.6); transform: translateY(-2px); }
 
     /* ===== KPIs ===== */
     .grid-kpis {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: clamp(16px, 3vw, 24px);
       margin-bottom: 32px;
     }
@@ -255,8 +281,7 @@
       padding: 24px;
       border-radius: 20px;
       box-shadow: var(--sombra-suave), var(--vidrio-reflejo);
-      transition: all var(--transicion);
-      animation: entrada 0.8s var(--transicion) both;
+      transition: transform var(--transicion), box-shadow var(--transicion), border-color var(--transicion);
       position: relative;
       overflow: hidden;
     }
@@ -285,21 +310,17 @@
       z-index: 2;
     }
     .valor {
-      font-size: clamp(1.8rem, 4.5vw, 2.2rem);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
       font-weight: 700;
       color: var(--negro);
       line-height: 1;
       position: relative;
       z-index: 2;
-      letter-spacing: -0.5px;
+      letter-spacing: -1px;
     }
     .valor .unidad { 
-      font-size: 0.45em; 
-      font-weight: 600; 
-      color: #777; 
-      margin-left: 6px; 
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-size: 0.45em; font-weight: 600; color: #777; margin-left: 6px; 
+      text-transform: uppercase; letter-spacing: 0.5px;
     }
     .card .contexto {
       margin: 12px 0 0 0;
@@ -327,6 +348,7 @@
       border-radius: 100px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,1);
       -webkit-overflow-scrolling: touch;
+      justify-content: center;
     }
     .chip {
       flex: 0 0 auto;
@@ -341,23 +363,14 @@
       cursor: pointer;
       transition: all var(--transicion);
     }
-    .chip:hover { 
-      border-color: var(--dorado); 
-      background: rgba(255,255,255,0.9);
-      transform: translateY(-2px); 
-    }
+    .chip:hover { border-color: var(--dorado); background: rgba(255,255,255,0.9); transform: translateY(-2px); }
     .chip:active { transform: scale(0.95); }
-    .chip.activo {
-      background: var(--verde-esmeralda);
-      border-color: var(--verde-esmeralda);
-      color: white;
-      box-shadow: 0 6px 15px rgba(4, 99, 7, 0.3);
-    }
+    .chip.activo { background: var(--verde-esmeralda); border-color: var(--verde-esmeralda); color: white; box-shadow: 0 6px 15px rgba(4, 99, 7, 0.3); }
 
     /* ===== Paneles de Gráficos ===== */
     .graficos {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
       gap: clamp(20px, 4vw, 32px);
     }
     .panel {
@@ -370,8 +383,7 @@
       padding: clamp(20px, 4vw, 32px);
       border-radius: 24px;
       box-shadow: var(--sombra-suave), var(--vidrio-reflejo);
-      transition: all var(--transicion);
-      animation: entrada 0.8s var(--transicion) both;
+      transition: transform var(--transicion), box-shadow var(--transicion);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -384,36 +396,20 @@
       background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
       pointer-events: none;
     }
-    .panel:hover { 
-      transform: translateY(-6px); 
-      box-shadow: var(--sombra-elevada), inset 0 1px 2px rgba(255,255,255,1); 
-    }
+    .panel:hover { transform: translateY(-6px); box-shadow: var(--sombra-elevada), inset 0 1px 2px rgba(255,255,255,1); }
     .panel.oculto { display: none; }
     
-    .panel h3 {
-      font-family: 'Marcellus', serif;
-      font-weight: 400;
-      font-size: 1.25rem;
-      margin: 0 0 6px 0;
-      color: var(--negro);
-    }
-    .panel .cat-tag {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--dorado);
-      margin: 0 0 24px 0;
-    }
+    .panel h3 { font-family: 'Marcellus', serif; font-weight: 400; font-size: 1.25rem; margin: 0 0 6px 0; color: var(--negro); }
+    .panel .cat-tag { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dorado); margin: 0 0 24px 0; }
     .panel canvas { max-height: 280px; width: 100% !important; margin-bottom: 20px;}
 
     .insight {
       margin-top: auto;
-      background: rgba(212, 175, 55, 0.08);
-      border: 1px solid rgba(212, 175, 55, 0.3);
+      background: rgba(212, 175, 55, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.25);
       border-left: 4px solid var(--dorado);
       border-radius: 12px;
-      padding: 16px 20px;
+      padding: 18px 22px;
       font-size: 0.92rem;
       line-height: 1.6;
       color: rgba(26,26,26,0.85);
@@ -421,23 +417,13 @@
     }
     .insight strong { color: var(--verde-esmeralda); font-weight: 700;}
     .insight .titulo-insight {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--dorado);
-      margin-bottom: 8px;
+      display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--dorado); margin-bottom: 8px;
     }
 
     .fuente {
-      margin-top: 40px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: rgba(26,26,26,0.5);
-      text-align: center;
-      padding: 20px;
-      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      margin-top: 40px; font-size: 0.8rem; font-weight: 500; color: rgba(26,26,26,0.5);
+      text-align: center; padding: 20px; border-top: 1px solid rgba(212, 175, 55, 0.2);
     }
 
     /* ===== Estados y Esqueletos ===== */
@@ -452,81 +438,42 @@
       overflow: hidden;
     }
     .skeleton::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      transform: translateX(-100%);
+      content: ''; position: absolute; inset: 0; transform: translateX(-100%);
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
       animation: brillo 1.5s infinite;
     }
     
-    .aviso-espera {
-      display: none;
-      margin: 0 0 24px 0;
-      padding: 16px 20px;
-      background: rgba(212, 175, 55, 0.15);
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(212, 175, 55, 0.5);
-      border-radius: 16px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: var(--negro);
-      box-shadow: var(--sombra-suave);
-    }
-    .aviso-espera.visible { display: block; animation: entrada 0.5s ease; }
+    .aviso-espera { display: none; margin: 0 0 24px 0; padding: 16px 20px; background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 16px; font-size: 0.95rem; font-weight: 500; text-align: center;}
+    .aviso-espera.visible { display: block; }
     
-    .error-box {
-      display: none;
-      background: rgba(255, 255, 255, 0.8);
-      -webkit-backdrop-filter: blur(16px);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--vidrio-borde);
-      border-left: 5px solid #B3261E;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: var(--sombra-elevada);
-      margin-bottom: 24px;
-    }
+    .error-box { display: none; background: rgba(255, 255, 255, 0.8); border: 1px solid var(--vidrio-borde); border-left: 5px solid #B3261E; border-radius: 16px; padding: 24px; margin-bottom: 24px; text-align: center;}
     .error-box.visible { display: block; }
     .error-box h3 { margin: 0 0 10px 0; color: #B3261E; font-size: 1.1rem; }
-    .error-box p { margin: 0 0 20px 0; font-size: 0.95rem; color: rgba(26,26,26,0.8); }
+    .error-box p { margin: 0 0 20px 0; font-size: 0.95rem; }
     
-    .btn-reintentar {
-      background: var(--verde-esmeralda);
-      color: white;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 12px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all var(--transicion);
-      box-shadow: 0 4px 15px rgba(4, 99, 7, 0.2);
-    }
-    .btn-reintentar:hover { background: #05780A; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(4, 99, 7, 0.3); }
-    .btn-reintentar:active { transform: scale(0.96); }
+    .btn-reintentar { background: var(--verde-esmeralda); color: white; border: none; padding: 12px 28px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all var(--transicion); }
+    .btn-reintentar:hover { background: #05780A; transform: translateY(-2px); }
 
-    @keyframes entrada {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
     @keyframes brillo { to { transform: translateX(100%); } }
 
     @media (max-width: 768px) {
       .orb-1 { width: 70vw; height: 70vw; }
       .orb-2 { width: 80vw; height: 80vw; }
       .veredicto::before { display: none; }
+      .filtros, .selector-industria { justify-content: flex-start; }
     }
     @media (max-width: 520px) {
       .grid-kpis, .graficos { grid-template-columns: 1fr; }
       .panel canvas { max-height: 240px; }
       .filtros { top: 8px; }
+      .cursor-glow { display: none; } /* Ocultar luz en pantallas táctiles */
     }
   </style>
 </head>
 <body>
+
+  <!-- Luz de seguimiento al cursor -->
+  <div class="cursor-glow" id="cursorGlow"></div>
 
   <!-- Elementos de profundidad del Glassmorphism -->
   <div class="fondo-animado">
@@ -535,36 +482,42 @@
     <div class="orb orb-3"></div>
   </div>
 
-  <div class="header">
-    <p class="eyebrow">Business Intelligence · Observatorio de Mercados</p>
-    <h1 id="tituloIndustria">Benchmarks de Industrias</h1>
-    <p>¿Vale la pena entrar a este mercado? Los números, explicados en simple.</p>
-  </div>
-
-  <div class="selector-industria" id="selectorIndustria"></div>
-
-  <div class="aviso-espera" id="avisoEspera">
-    ⏳ Conectando al motor de datos... (puede tardar unos segundos en el primer arranque)
-  </div>
-
-  <div class="error-box" id="errorBox">
-    <h3>Error de conexión</h3>
-    <p id="errorDetalle"></p>
-    <button class="btn-reintentar" onclick="cargarDashboard()">Reintentar conexión</button>
-  </div>
-
-  <div id="contenido">
-    <div class="skeleton" style="height:140px; margin-bottom:32px;"></div>
-    <div class="grid-kpis">
-      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+  <!-- Contenedor Central para Simetría Perfecta -->
+  <main class="layout-central">
+    
+    <div class="header">
+      <span class="eyebrow">Business Intelligence · Observatorio de Mercados</span>
+      <h1 id="tituloIndustria">Benchmarks de Industrias</h1>
+      <p>¿Vale la pena entrar a este mercado? Los números, explicados en simple.</p>
     </div>
-    <div class="graficos">
-      <div class="skeleton" style="min-height:350px;"></div>
-      <div class="skeleton" style="min-height:350px;"></div>
-    </div>
-  </div>
 
-  <p class="fuente">Fuente: Benchmarks_Industria_Piedra_2025 · Datos de mercado 2024–2026 · Actualización en tiempo real vía API</p>
+    <nav class="selector-industria" id="selectorIndustria"></nav>
+
+    <div class="aviso-espera" id="avisoEspera">
+      ⏳ Conectando al motor de datos... (puede tardar unos segundos en el primer arranque)
+    </div>
+
+    <div class="error-box" id="errorBox">
+      <h3>Error de conexión</h3>
+      <p id="errorDetalle"></p>
+      <button class="btn-reintentar" onclick="cargarDashboard()">Reintentar conexión</button>
+    </div>
+
+    <!-- Contenedor con transición de opacidad -->
+    <div id="contenido" class="transicion-contenido">
+      <div class="skeleton" style="height:140px; margin-bottom:32px;"></div>
+      <div class="grid-kpis">
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+      <div class="graficos">
+        <div class="skeleton" style="min-height:350px;"></div>
+        <div class="skeleton" style="min-height:350px;"></div>
+      </div>
+    </div>
+
+    <p class="fuente">Fuente: Base de Datos Maestros 2025 · Actualización en tiempo real vía API</p>
+
+  </main>
 
   <script>
     // Enlace de backend en Render ejecutando Python
@@ -575,12 +528,33 @@
     let datosGlobales = [];
     let industriaActiva = null;
 
+    // --- Efecto Cursor Inmersivo ---
+    const cursor = document.getElementById('cursorGlow');
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.opacity = '1';
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
+
+    // --- Motor de Respiración en Scroll (Intersection Observer) ---
+    function iniciarRespiracionScroll() {
+      const observer = new IntersectionObserver((entradas) => {
+        entradas.forEach(entrada => {
+          if (entrada.isIntersecting) {
+            entrada.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+      document.querySelectorAll('.scroll-respiro').forEach(el => observer.observe(el));
+    }
+
     // ---------- Utilidades ----------
     const fmt = (n, dec = 0) => Number(n).toLocaleString('es-CO', {
       minimumFractionDigits: dec, maximumFractionDigits: dec
     });
 
-    // Busca una métrica de la industria activa (null si no existe)
     const M = (nombre) => datosGlobales.find(d =>
       (d['Industria'] ?? 'Piedra y Superficies') === industriaActiva && d['Métrica'] === nombre
     ) ?? null;
@@ -589,8 +563,6 @@
 
     // =========================================================
     //   CONFIGURACIÓN POR INDUSTRIA
-    //   (los VALORES vienen de la base de datos; aquí vive la
-    //    capa editorial: qué mostrar y cómo explicarlo)
     // =========================================================
     const CONFIG = {
 
@@ -863,7 +835,7 @@
     };
 
     // =========================================================
-    //   MOTOR DE RENDERIZADO (Lógica Inalterada)
+    //   MOTOR DE RENDERIZADO ASÍNCRONO (Con Transiciones)
     // =========================================================
 
     async function cargarDashboard() {
@@ -886,7 +858,8 @@
         Chart.defaults.color = '#1A1A1A';
 
         construirSelector();
-        renderizarIndustria(industriaActiva ?? Object.keys(agruparIndustrias())[0]);
+        // Renderizado inicial sin fade-out
+        await renderizarIndustriaCore(Object.keys(agruparIndustrias())[0]);
 
       } catch (error) {
         console.error("Fallo de conexión con la API:", error);
@@ -921,7 +894,29 @@
       });
     }
 
-    function renderizarIndustria(industria) {
+    // Función envoltorio para animar la transición
+    async function renderizarIndustria(industria) {
+      if(industriaActiva === industria) return;
+      
+      const c = document.getElementById('contenido');
+      
+      // 1. Fade out suave
+      c.classList.add('oculto');
+      
+      // 2. Esperar a que la animación termine (300ms)
+      await new Promise(r => setTimeout(r, 300));
+      
+      // 3. Renderizar el nuevo contenido
+      await renderizarIndustriaCore(industria);
+      
+      // 4. Fade in
+      requestAnimationFrame(() => {
+        c.classList.remove('oculto');
+      });
+    }
+
+    // La lógica de renderizado principal (Extraída para reutilizarla)
+    async function renderizarIndustriaCore(industria) {
       industriaActiva = industria;
       document.querySelectorAll('.ind-chip').forEach(b =>
         b.classList.toggle('activo', b.dataset.ind === industria));
@@ -934,7 +929,7 @@
       const c = document.getElementById('contenido');
 
       if (!cfg) {
-        c.innerHTML = `<div class="error-box visible"><h3>Industria sin configuración</h3><p>Hay datos de "${industria}" en la base, pero el dashboard aún no tiene su capa de análisis. Agréguela en el objeto CONFIG del código.</p></div>`;
+        c.innerHTML = `<div class="error-box visible"><h3>Industria sin configuración</h3><p>Hay datos de "${industria}" en la base, pero el dashboard aún no tiene su capa de análisis.</p></div>`;
         return;
       }
 
@@ -942,7 +937,7 @@
       const nombresCat = { financiero: '💰 Dinero', mercado: '🌍 Mercado', operativo: '⚙️ Operación' };
 
       c.innerHTML = `
-        <div class="veredicto">
+        <div class="veredicto scroll-respiro">
           <h2>${cfg.veredicto.titulo}</h2>
           <p>${cfg.veredicto.texto()}</p>
           <div class="senales">${cfg.veredicto.senales.map(s => `<span class="senal">${s}</span>`).join('')}</div>
@@ -951,7 +946,7 @@
         <div class="grid-kpis">
           ${cfg.kpis.map((k, i) => {
             const m = M(k.met);
-            return `<div class="card">
+            return `<div class="card scroll-respiro">
               <h3>${k.label}</h3>
               <div class="valor"><span id="kpi${i}"></span><span class="unidad">${k.unidad}</span></div>
               <p class="contexto">${k.ctx}</p>
@@ -959,14 +954,14 @@
           }).join('')}
         </div>
 
-        <div class="filtros" id="filtros">
+        <div class="filtros scroll-respiro" id="filtros">
           <button class="chip activo" data-cat="todos">Ver todo</button>
           ${categorias.map(cat => `<button class="chip" data-cat="${cat}">${nombresCat[cat] ?? cat}</button>`).join('')}
         </div>
 
         <div class="graficos">
           ${cfg.graficos.map((g, i) => `
-            <div class="panel" data-cat="${g.cat}" id="panel${i}">
+            <div class="panel scroll-respiro" data-cat="${g.cat}" id="panel${i}">
               <h3>${g.titulo}</h3>
               <p class="cat-tag">${g.catLabel}</p>
               <canvas id="ch${i}"></canvas>
@@ -993,6 +988,7 @@
       });
 
       activarFiltros();
+      iniciarRespiracionScroll(); // Adjuntamos el observador a los nuevos elementos generados
     }
 
     function construirGrafico(g, canvas) {
