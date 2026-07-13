@@ -1,33 +1,184 @@
-<script>
-    // Enlace de tu backend en Render ejecutando Python
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Analítico | Industria de la Piedra</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blanco-crema: #FDFBF7;
+      --negro: #1A1A1A;
+      --dorado: #D4AF37;
+      --verde-esmeralda: #046307;
+    }
+    body {
+      background-color: var(--blanco-crema);
+      color: var(--negro);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 2.5rem;
+    }
+    .header {
+      border-bottom: 3px solid var(--dorado);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    h1 {
+      color: var(--verde-esmeralda);
+      margin: 0 0 0.5rem 0;
+      font-size: 2.4rem;
+      letter-spacing: -0.5px;
+    }
+    p.subtitle {
+      font-size: 1.1rem;
+      color: #555;
+      margin: 0;
+      font-weight: 500;
+    }
+    /* Estado de Carga (Spinner elegante) */
+    #loader {
+      text-align: center;
+      padding: 4rem;
+      font-size: 1.2rem;
+      color: var(--verde-esmeralda);
+      font-weight: 500;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+    /* Contenedor de Tarjetas */
+    .grid-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .card {
+      background: #ffffff;
+      border-left: 6px solid var(--dorado);
+      padding: 1.8rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      animation: slideUp 0.6s forwards;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+    .card h3 {
+      color: var(--verde-esmeralda);
+      margin: 0 0 0.8rem 0;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .valor {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--negro);
+    }
+    .unidad {
+      font-size: 0.8rem;
+      color: #888;
+      font-weight: 400;
+      margin-left: 4px;
+    }
+    /* Contenedor de Gráficos */
+    .graficos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2.5rem;
+    }
+    .chart-box {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      border-top: 4px solid var(--verde-esmeralda);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      opacity: 0;
+      animation: slideUp 0.6s 0.2s forwards;
+    }
+    .chart-box h3 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 2rem;
+      color: var(--negro);
+      font-size: 1.1rem;
+    }
+    /* Keyframes */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Responsividad Móvil */
+    @media (max-width: 768px) {
+      body { padding: 1.5rem; }
+      h1 { font-size: 1.8rem; }
+      .graficos { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Transformación de Superficies</h1>
+    <p class="subtitle">Monitoreo de Mercado y Benchmarks Estratégicos (2025-2026)</p>
+  </div>
+
+  <div id="loader">Conectando con la base de datos segura...</div>
+
+  <!-- Identificador Restaurado: id="kpis" -->
+  <div class="grid-kpis" id="kpis"></div>
+
+  <!-- Contenedor oculto hasta que carguen los datos -->
+  <div class="graficos" id="graficos-container" style="display: none;">
+    <div class="chart-box">
+      <h3>Inversión vs Ingresos (USD)</h3>
+      <!-- Identificador Restaurado: id="chart1" -->
+      <canvas id="chart1"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Cuota de Mercado: Granito vs Otras Superficies</h3>
+      <!-- Identificador Restaurado: id="chart2" -->
+      <canvas id="chart2"></canvas>
+    </div>
+  </div>
+
+  <script>
     const URL_BACKEND = "https://dashboard-marmol.onrender.com/api/benchmarks";
 
     async function cargarDashboard() {
       try {
         const respuesta = await fetch(URL_BACKEND);
-        
-        if (!respuesta.ok) {
-          throw new Error(`Error HTTP: ${respuesta.status}`);
-        }
-        
+        if (!respuesta.ok) throw new Error(`Error HTTP: ${respuesta.status}`);
         const datos = await respuesta.json();
         
-        // 1. Renderizado de KPIs en pantalla
+        // 1. Ocultar el estado de carga y mostrar los contenedores
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('graficos-container').style.display = 'grid';
+
+        // 2. Renderizado Dinámico de KPIs
         const contenedor = document.getElementById('kpis');
         const metricasClave = ['Tamaño del Mercado', 'Margen Bruto', 'Overhead por SqFt'];
         
-        // Si tu IA cambió las clases CSS, asegúrate de mantener 'item.Métrica' y 'item.Valor_Maximo'
         datos.forEach(item => {
           if(metricasClave.includes(item.Métrica)) {
             contenedor.innerHTML += `
               <div class="card">
                 <h3>${item.Métrica}</h3>
-                <div class="valor">${item.Valor_Maximo} <span style="font-size:0.5em; color:#666;">${item.Unidad}</span></div>
+                <div class="valor">${item.Valor_Maximo} <span class="unidad">${item.Unidad}</span></div>
               </div>`;
           }
         });
 
-        // 2. Gráfico de Barras: Métricas Financieras
+        // 3. Gráfico de Barras: Métricas Financieras
         const ingresoMax = datos.find(d => d.Métrica === 'Ingreso Anual Promedio').Valor_Maximo;
         const capex = datos.find(d => d.Métrica === 'Inversión Inicial (CapEx)').Valor_Maximo;
         
@@ -38,17 +189,18 @@
             datasets: [{
               data: [ingresoMax, capex],
               backgroundColor: ['#046307', '#1A1A1A'],
-              borderRadius: 4
+              borderRadius: 6,
+              barPercentage: 0.6
             }]
           },
           options: { 
-            responsive: true,
+            responsive: true, 
             plugins: { legend: { display: false } },
             scales: { y: { beginAtZero: true } }
           }
         });
 
-        // 3. Gráfico Doughnut: Participación de Materiales
+        // 4. Gráfico Doughnut: Materiales
         const granito = datos.find(d => d.Métrica === 'Granito (Cuota)').Valor_Maximo;
         new Chart(document.getElementById('chart2'), {
           type: 'doughnut',
@@ -58,23 +210,24 @@
               data: [granito, 100 - granito], 
               backgroundColor: ['#D4AF37', '#1A1A1A'],
               borderColor: '#FDFBF7',
-              borderWidth: 3
+              borderWidth: 4
             }]
           },
-          options: {
-            responsive: true,
-            cutout: '65%',
-            plugins: {
-              legend: { position: 'bottom' }
-            }
+          options: { 
+            responsive: true, 
+            cutout: '70%', 
+            plugins: { legend: { position: 'bottom' } } 
           }
         });
 
       } catch (error) {
-        console.error("Fallo de conexión con la API:", error);
+        console.error("Fallo de conexión:", error);
+        document.getElementById('loader').innerHTML = '<span style="color: red;">Error crítico de conexión con la base de datos. Comunícate con soporte.</span>';
       }
     }
     
-    // Inicialización del despliegue
+    // Iniciar el sistema
     cargarDashboard();
-</script>
+  </script>
+</body>
+</html>
